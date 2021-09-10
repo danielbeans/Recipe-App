@@ -1,6 +1,9 @@
 # Recipe App
 
+For specific documentation about the server and client, please read the README.md files found in those specific directories.
+
 ## Documentation
+
 [Increment 1](https://drive.google.com/drive/folders/1RXy5j13vA9OfV6v2fKtlgVWtMlTMTLXr?usp=sharing)
 
 [Increment 2](https://drive.google.com/drive/folders/1f7kTZWNFPN9X1DCPW3oeFS-U1jUE0GTw?usp=sharing)
