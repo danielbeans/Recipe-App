@@ -3,7 +3,18 @@
     "module": "commonjs",
     "target": "ESNext",
     "outDir": "dist",
-    "skipLibCheck": true
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "noImplicitAny": false,
+    "strict": true,
+    "watch": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

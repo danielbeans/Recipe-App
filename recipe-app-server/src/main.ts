@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 const cors = require("cors");
 const app = express(); // creates new express application
 const PORT = 3000;
