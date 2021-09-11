@@ -107,25 +107,31 @@
         >
       </li>
     </ul>
-    <h1 v-if="myJson">{{ myJson }}</h1>
+
+    <h3>
+      JSON response from server is:
+      <!-- If json is a truthy value, display the content, else don't display anything -->
+      <span v-if="json">{{ json }}</span>
+    </h3>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import axios from "axios";
 
-@Options({
-  props: {
-    msg: String,
-  },
-})
+@Component
 export default class HelloWorld extends Vue {
-  msg!: string;
-  myJson = "";
-  async mounted() {
-    const res = await fetch("http://localhost:3000");
-    const json = await res.json();
-    this.myJson = json;
+  @Prop() private msg!: string;
+  private json = ""; // json property we will use to display content to user
+
+  async created() {
+    this.json = await this.fetchData(); // set this.json to data returned from our backend
+  }
+
+  private async fetchData() {
+    const res = await axios("http://localhost:3000"); // use axios (library that allows us to make requests to our backend or an API) to get content from our route defined on our server
+    return res.data; // return the data from the request
   }
 }
 </script>

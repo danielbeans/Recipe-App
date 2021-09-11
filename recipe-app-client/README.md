@@ -1,21 +1,24 @@
 # recipe-app-client
 
 ## Project setup
-
-In order to install all required dependencies for the client-side application, run this command within the `recipe-app-client` directory:
-
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
-
 ```
-npm run serve
+yarn serve
 ```
 
 ### Compiles and minifies for production
+```
+yarn build
+```
 
+### Lints and fixes files
 ```
-npm build
+yarn lint
 ```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
