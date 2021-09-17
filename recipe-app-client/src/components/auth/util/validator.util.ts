@@ -76,7 +76,7 @@ export class AuthValidator {
           this.passwordsMatch
         );
       },
-      listInvalid: function() {
+      listInvalid: function () {
         const filtered = Object.entries(this).filter(
           (entry) =>
             !entry[1] &&
@@ -90,7 +90,8 @@ export class AuthValidator {
   }
 
   private static email(email: ISignupForm["email"]) {
-    const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const reg =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test(email.toLowerCase());
   }
 
