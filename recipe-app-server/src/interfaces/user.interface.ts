@@ -1,5 +1,5 @@
 import { Grocery } from "./grocery.interfaces";
-import { GroceryOrder } from "./groceryOrder.interface";
+import { GroceryOrder } from "./grocery-order.interface";
 import { Post } from "./post.interface";
 import { Recipe } from "./recipe.interface";
 

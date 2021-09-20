@@ -4,17 +4,7 @@ module.exports = {
   env: {
     node: true,
   },
-<<<<<<< HEAD
 
-  extends: ["plugin:vue/recommended"],
-
-=======
-  'extends': [
-    'plugin:vue/essential',
-    'eslint:recommended',
-    '@vue/typescript/recommended'
-  ],
->>>>>>> 720e88bcf910c67baacf00510dfc30d47797bfef
   parserOptions: {
     ecmaVersion: 2020,
   },
@@ -25,13 +15,6 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
   },
-
-  extends: [
-    "plugin:vue/recommended",
-    "plugin:vue/essential",
-    "eslint:recommended",
-    "@vue/typescript/recommended",
-  ],
 
   extends: [
     "plugin:vue/recommended",
