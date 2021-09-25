@@ -2,16 +2,27 @@
   <div class="login-form max-w-xl mx-auto text-left">
     <form
       @submit="signup"
-      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      class="bg-white md:shadow-md rounded px-8 pt-6 pb-8 mb-4"
     >
       <h3 class="text-xl mb-4 text-gray-600 text-center">Sign up</h3>
-      <div class="mb-4 flex">
-        <div class="w-full mr-5">
+      <div class="mb-4 flex flex-wrap md:flex-nowrap">
+        <div class="w-full md:mr-5 mb-2">
           <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
           <input
             v-model="signupForm.name"
             required
-            class="shadow appearance-none border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="
+              shadow
+              appearance-none
+              border
+              rounded
+              py-2
+              px-3
+              w-full
+              text-gray-700
+              leading-tight
+              focus:outline-none focus:shadow-outline
+            "
             :class="{ 'border-red-500': !validate.name && userHasTyped }"
             type="text"
             placeholder="Name"
@@ -24,7 +35,18 @@
           <input
             v-model="signupForm.username"
             required
-            class="shadow appearance-none border rounded py-2 w-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="
+              shadow
+              appearance-none
+              border
+              rounded
+              py-2
+              w-full
+              px-3
+              text-gray-700
+              leading-tight
+              focus:outline-none focus:shadow-outline
+            "
             :class="{ 'border-red-500': !validate.username && userHasTyped }"
             type="text"
             placeholder="Username"
@@ -39,7 +61,18 @@
           <input
             v-model="signupForm.password"
             required
-            class="shadow appearance-none border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="
+              shadow
+              appearance-none
+              border
+              rounded
+              py-2
+              px-3
+              w-full
+              text-gray-700
+              leading-tight
+              focus:outline-none focus:shadow-outline
+            "
             :class="{
               'border-red-500':
                 (!validate.password && userHasTyped) ||
@@ -56,7 +89,18 @@
           <input
             v-model="signupForm.confirmPassword"
             required
-            class="shadow appearance-none border rounded py-2 w-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            class="
+              shadow
+              appearance-none
+              border
+              rounded
+              py-2
+              w-full
+              px-3
+              text-gray-700
+              leading-tight
+              focus:outline-none focus:shadow-outline
+            "
             :class="{
               'border-red-500':
                 (!validate.confirmPassword && userHasTyped) ||
@@ -72,7 +116,19 @@
         <input
           v-model="signupForm.email"
           required
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          class="
+            shadow
+            appearance-none
+            border
+            rounded
+            w-full
+            py-2
+            px-3
+            text-gray-700
+            mb-3
+            leading-tight
+            focus:outline-none focus:shadow-outline
+          "
           :class="{ 'border-red-500': !validate.email && userHasTyped }"
           type="email"
           placeholder="example@email.com"
@@ -89,7 +145,7 @@
             <span
               v-if="
                 index === validate.listInvalid().length - 1 &&
-                  validate.listInvalid().length !== 1
+                validate.listInvalid().length !== 1
               "
               >&
               {{
@@ -134,13 +190,31 @@
 
       <div class="flex items-center flex-wrap justify-between">
         <button
-          class="bg-blue-500 w-full hover:bg-blue-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          class="
+            bg-blue-500
+            w-full
+            hover:bg-blue-400
+            text-white
+            font-bold
+            py-2
+            px-4
+            rounded
+            focus:outline-none focus:shadow-outline
+          "
           type="submit"
         >
           Sign Up
         </button>
         <router-link
-          class="w-full text-center mt-3 align-baseline font-bold text-xs text-blue-500 hover:text-blue-400"
+          class="
+            w-full
+            text-center
+            mt-3
+            align-baseline
+            font-bold
+            text-xs text-blue-500
+            hover:text-blue-400
+          "
           to="/login"
           >Already have an account? Login here</router-link
         >
