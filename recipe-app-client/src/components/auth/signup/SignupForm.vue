@@ -53,8 +53,8 @@
           />
         </div>
       </div>
-      <div class="mb-4 flex">
-        <div class="w-full mr-5">
+      <div class="mb-4 flex flex-wrap md:flex-nowrap">
+        <div class="w-full md:mr-5 mb-2 ">
           <label class="block text-gray-700 text-sm font-bold mb-2"
             >Password*</label
           >
