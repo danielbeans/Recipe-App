@@ -1,5 +1,5 @@
-import ISignupForm from "../signup/interfaces/signup.interface";
-import ILoginForm from "../login/interfaces/login.interface";
+import ISignupForm from "../interfaces/signup.interface";
+import ILoginForm from "../interfaces/login.interface";
 
 interface AuthValidation {
   username: boolean;

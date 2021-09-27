@@ -1,8 +1,8 @@
 <template>
   <div class="login-form max-w-xl mx-auto text-left">
     <form
-      @submit="signup"
       class="bg-white md:shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      @submit="signup"
     >
       <h3 class="text-xl mb-4 text-gray-600 text-center">Sign up</h3>
       <div class="mb-4 flex flex-wrap md:flex-nowrap">
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="mb-4 flex flex-wrap md:flex-nowrap">
-        <div class="w-full md:mr-5 mb-2 ">
+        <div class="w-full md:mr-5 mb-2">
           <label class="block text-gray-700 text-sm font-bold mb-2"
             >Password*</label
           >
@@ -224,8 +224,8 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import ISignupForm from "./interfaces/signup.interface";
-import { AuthValidator } from "../util/validator.util";
+import { AuthValidator } from "../helpers/validator";
+import ISignupForm from "../interfaces/signup.interface";
 import axios from "axios";
 
 @Component({})
