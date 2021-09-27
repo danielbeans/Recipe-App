@@ -1,7 +1,7 @@
 <template>
-  <section class="login-form w-full max-w-xs mx-auto text-left">
-    <form class="bg-white shadow-md rounded py-6 px-8 rounded" @submit="login">
-      <h3 class="text-lg mb-4 text-gray-600 text-center">Login</h3>
+  <section class="login-form w-full md:max-w-xl mx-auto text-left">
+    <form class="bg-white md:shadow-md md:px-10 rounded py-10 mx-10" @submit="login">
+      <h3 class="text-xl mb-4 text-gray-600 text-center">Login</h3>
       <div class="mb-4">
         <label class="block font-bold text-sm mb-2 text-gray-700" for="username"
           >Username</label
