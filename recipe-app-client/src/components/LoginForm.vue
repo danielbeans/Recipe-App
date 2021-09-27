@@ -105,8 +105,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { AuthValidator } from "../util/validator.util";
-import ILoginForm from "./interfaces/login.interface";
+import { AuthValidator } from "../helpers/validator";
+import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
 
 @Component({})
