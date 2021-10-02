@@ -132,7 +132,7 @@ export default class LoginForm extends Vue {
     try {
       if (this.validate.validated) {
         const res = await axios.post(
-          "http://localhost:3000/login",
+          "http://localhost:3000/auth/login",
           this.loginForm
         );
         console.log(res);

@@ -257,10 +257,12 @@ export default class SignupForm extends Vue {
       event.preventDefault();
       if (this.validate.validated) {
         event.preventDefault();
-        const res = await axios.post(
-          "http://localhost:3000/signup",
-          this.signupForm
-        );
+        const res = await axios.post("http://localhost:3000/auth/signup", {
+          name: this.signupForm.name,
+          email: this.signupForm.email,
+          username: this.signupForm.username,
+          password: this.signupForm.password,
+        });
         console.log(res);
         return res;
       }
