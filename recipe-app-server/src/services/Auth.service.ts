@@ -8,25 +8,18 @@ import jwt from "jsonwebtoken";
 
 export const AuthService = {
   EXPIRATION: "2h",
-  async login({ email, password }: ILogin) {
-    const user: IUser = await UserModel.findOne({ email });
+  async login({ username, password }: ILogin) {
+    const user: IUser = await UserModel.findOne({ username });
     if (user && (await validatePassword(password, user.password))) {
-      const token = jwt.sign({ user_id: user._id, email }, config.auth.secret, {
-        expiresIn: this.EXPIRATION,
-      });
+      const token = this.signToken(user, username);
       user.token = token;
       return user;
     }
     throw new Error("Username and/or password combination incorrect");
   },
   async createUser({ name, username, password, email }: ISignup) {
-    const exists = await UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
-    if (exists && exists.username === username && exists.email === email)
-      throw new Error("User with username and email already exists.");
-    else if (exists && exists.email === email)
-      throw new Error("User with email already exists.");
-    else if (exists && exists.username === username)
-      throw new Error("User with username already exists.");
+    const hasDuplicate = this.checkDuplicateEmailOrUsername(email, username);
+    if (hasDuplicate) throw hasDuplicate;
     email = email.toLowerCase();
     const user: IUser = await UserModel.create({
       name,
@@ -34,10 +27,25 @@ export const AuthService = {
       username,
       password,
     });
-    const token = jwt.sign({ user_id: user._id, email }, config.auth.secret, {
-      expiresIn: this.EXPIRATION,
-    });
+    const token = this.signToken(user, email);
     user.token = token;
     return user;
+  },
+
+  async checkDuplicateEmailOrUsername(email: string, username: string) {
+    const exists = await UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
+    if (exists && exists.username === username && exists.email === email)
+      return new Error("User with username and email already exists.");
+    else if (exists && exists.email === email)
+      return new Error("User with email already exists.");
+    else if (exists && exists.username === username)
+      return new Error("User with username already exists.");
+    return false;
+  },
+
+  signToken(user: IUser, username: string) {
+    return jwt.sign({ user_id: user._id, username }, config.auth.secret, {
+      expiresIn: this.EXPIRATION,
+    });
   },
 };

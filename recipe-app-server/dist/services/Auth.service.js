@@ -7,25 +7,19 @@ const config_1 = tslib_1.__importDefault(require("../config"));
 const jsonwebtoken_1 = tslib_1.__importDefault(require("jsonwebtoken"));
 exports.AuthService = {
     EXPIRATION: "2h",
-    async login({ email, password }) {
-        const user = await User_model_1.UserModel.findOne({ email });
+    async login({ username, password }) {
+        const user = await User_model_1.UserModel.findOne({ username });
         if (user && (await password_utility_1.validatePassword(password, user.password))) {
-            const token = jsonwebtoken_1.default.sign({ user_id: user._id, email }, config_1.default.auth.secret, {
-                expiresIn: this.EXPIRATION,
-            });
+            const token = this.signToken(user, username);
             user.token = token;
             return user;
         }
         throw new Error("Username and/or password combination incorrect");
     },
     async createUser({ name, username, password, email }) {
-        const exists = await User_model_1.UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
-        if (exists && exists.username === username && exists.email === email)
-            throw new Error("User with username and email already exists.");
-        else if (exists && exists.email === email)
-            throw new Error("User with email already exists.");
-        else if (exists && exists.username === username)
-            throw new Error("User with username already exists.");
+        const hasDuplicate = this.checkDuplicateEmailOrUsername(email, username);
+        if (hasDuplicate)
+            throw hasDuplicate;
         email = email.toLowerCase();
         const user = await User_model_1.UserModel.create({
             name,
@@ -33,10 +27,23 @@ exports.AuthService = {
             username,
             password,
         });
-        const token = jsonwebtoken_1.default.sign({ user_id: user._id, email }, config_1.default.auth.secret, {
-            expiresIn: this.EXPIRATION,
-        });
+        const token = this.signToken(user, email);
         user.token = token;
         return user;
+    },
+    async checkDuplicateEmailOrUsername(email, username) {
+        const exists = await User_model_1.UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
+        if (exists && exists.username === username && exists.email === email)
+            return new Error("User with username and email already exists.");
+        else if (exists && exists.email === email)
+            return new Error("User with email already exists.");
+        else if (exists && exists.username === username)
+            return new Error("User with username already exists.");
+        return false;
+    },
+    signToken(user, username) {
+        return jsonwebtoken_1.default.sign({ user_id: user._id, username }, config_1.default.auth.secret, {
+            expiresIn: this.EXPIRATION,
+        });
     },
 };

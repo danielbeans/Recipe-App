@@ -1,4 +1,4 @@
 export default interface ILogin {
-  readonly email: string;
+  readonly username: string;
   readonly password: string;
 }
