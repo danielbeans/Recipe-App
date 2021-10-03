@@ -6,12 +6,20 @@ const cors_1 = tslib_1.__importDefault(require("cors"));
 const config_1 = tslib_1.__importDefault(require("./config"));
 const Auth_routes_1 = require("./routes/Auth.routes");
 const database_utility_1 = require("./util/database.utility");
+const verify_jwt_middleware_1 = require("./middleware/verify-jwt.middleware");
 const app = express_1.default(); // creates new express application
 app.use(cors_1.default()); // informs express to use the cors middleware (Cross Origin Request Sharing)
 app.use(express_1.default.json()); // allows JSON responses to be read
 express_1.default.urlencoded({ extended: false }); // allows urlencoded responses to be read
+// interface IRequest extends Request {
+//   user: { user_id: string; email: string; iat: number; exp: number };
+// }
 (async function main() {
     await database_utility_1.connectDb(); // Before making any routes for the server, wait for DB to connect
+    app.get("/", verify_jwt_middleware_1.verifyJwt, (req, res) => {
+        console.log(req.user);
+        res.status(200).send("Hello, authenticated user!");
+    });
     app.use("/auth", Auth_routes_1.AuthRoutes()); // setup routes for AuthService. Second argument must be a function EXECUTION rather than a reference.
     app.listen(config_1.default.express.port, () => console.log(`App running on http://localhost:${config_1.default.express.port}`)); // tells express to listen on the port specified on localhost
 })();

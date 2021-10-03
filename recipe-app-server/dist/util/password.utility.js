@@ -12,7 +12,7 @@ async function hashPassword(password) {
     }
 }
 exports.hashPassword = hashPassword;
-async function comparePassword(hash, guess) {
-    return bcrypt_1.default.compare(guess, hash);
+async function validatePassword(password, hash) {
+    return bcrypt_1.default.compare(password, hash);
 }
-exports.comparePassword = comparePassword;
+exports.validatePassword = validatePassword;

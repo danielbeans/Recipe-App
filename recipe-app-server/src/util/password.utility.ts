@@ -8,3 +8,7 @@ export async function hashPassword(password: string) {
     console.error(err); // replace this with actual error handling
   }
 }
+
+export async function validatePassword(password: string, hash: string) {
+  return bcrypt.compare(password, hash);
+}

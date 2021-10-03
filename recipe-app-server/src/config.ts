@@ -10,4 +10,7 @@ export default {
   express: {
     port: process.env.PORT,
   },
+  auth: {
+    secret: process.env.AUTH_SECRET,
+  },
 };
