@@ -1,5 +1,5 @@
 <template>
-  <section class="login-form w-full md:max-w-xl mx-auto text-left">
+  <section class="login-form w-full md:max-w-xl mx-auto text-left mt-5">
     <form
       class="bg-white md:shadow-md md:px-10 rounded py-10 mx-10"
       @submit="login"
@@ -109,13 +109,36 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { AuthValidator } from "../helpers/validator";
+import { namespace } from "vuex-class";
+import { IUser } from "../interfaces/user.interface";
 import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
 
-@Component({})
+const AuthModule = namespace("AuthModule");
+
+@Component({ name: "LoginForm" })
 export default class LoginForm extends Vue {
+  @AuthModule.Action("setUser") setUser: (user: IUser) => void;
+  @AuthModule.Getter("isLoggedIn") isLoggedIn: boolean;
+  @AuthModule.Getter("getUser") getUser: IUser;
   private loginForm: ILoginForm = { username: "", password: "" };
   private error = "";
+
+  private async login(e: Event) {
+    e.preventDefault();
+    try {
+      if (this.validate.validated) {
+        const res = await axios.post(
+          "http://localhost:3000/auth/login",
+          this.loginForm
+        );
+        this.setUser(res.data.user as IUser);
+        this.$router.push("/recipes");
+      }
+    } catch (err) {
+      return new Error("Unable to login to user account");
+    }
+  }
 
   get validate() {
     return AuthValidator.validate(this.loginForm);
@@ -126,20 +149,13 @@ export default class LoginForm extends Vue {
       this.loginForm.username.length >= 1 || this.loginForm.password.length >= 1
     );
   }
-
-  private async login(e: Event) {
-    e.preventDefault();
-    try {
-      if (this.validate.validated) {
-        const res = await axios.post(
-          "http://localhost:3000/auth/login",
-          this.loginForm
-        );
-        console.log(res);
-      }
-    } catch (err) {
-      return new Error("Unable to login to user account");
-    }
-  }
 }
 </script>
+<style lang="scss" scoped>
+.center {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+</style>

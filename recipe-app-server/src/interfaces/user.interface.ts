@@ -8,11 +8,11 @@ export interface IUser {
   readonly name: string;
   readonly email: string;
   readonly username: string;
-  readonly password: string;
+  password: string;
   readonly avatar: string;
   token: string;
-  readonly favorites: Recipe[];
-  readonly groceries: Grocery[];
-  readonly orders: GroceryOrder[];
-  readonly posts: Post[];
+  readonly favorites?: Recipe[];
+  readonly groceries?: Grocery[];
+  readonly orders?: GroceryOrder[];
+  readonly posts?: Post[];
 }

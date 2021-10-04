@@ -1,0 +1,108 @@
+<template>
+  <div>
+    <v-app-bar class="d-md-none"
+      ><v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>Recipe Lens</v-toolbar-title></v-app-bar
+    >
+    <v-navigation-drawer
+      v-model="drawer"
+      :permanent="$vuetify.breakpoint.mdAndUp"
+      app
+      light
+    >
+      <v-list v-if="getUser">
+        <v-list-item class="center flex justify-center">
+          <v-list-item-avatar
+            class="ma-0"
+            style="clip-path: circle(45%)"
+            size="100"
+          >
+            <v-img v-html="getAvatar"></v-img>
+          </v-list-item-avatar>
+        </v-list-item>
+
+        <v-list-item class="text-center">
+          <v-list-item-content>
+            <v-list-item-title class="text-h6">
+              {{ getUser.name }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{ getUser.username }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list nav dense>
+        <div v-if="!isLoggedIn">
+          <v-list-item
+            v-for="item in authItems"
+            :key="item.name"
+            link
+            :to="item.route"
+            ><v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+          </v-list-item>
+        </div>
+        <div v-else>
+          <v-list-item
+            v-for="item in navItems"
+            :key="item.name"
+            link
+            :to="item.route"
+            ><v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="logout"
+            ><v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </div>
+      </v-list>
+    </v-navigation-drawer>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import { Action, Getter, namespace } from "vuex-class";
+import { IUser } from "../interfaces/user.interface";
+
+interface IVListItem {
+  name: string;
+  icon: string;
+  route: string;
+}
+
+const AuthModule = namespace("AuthModule");
+@Component({ name: "Sidebar" })
+export default class Sidebar extends Vue {
+  @AuthModule.Action("logoutUser") logoutUser: () => void;
+  @AuthModule.Getter("getUser") getUser: IUser;
+  @AuthModule.Getter("isLoggedIn") isLoggedIn: boolean;
+  private drawer = false;
+  private authItems: IVListItem[] = [
+    { name: "Login", icon: "mdi-account", route: "/login" },
+    { name: "Sign Up", icon: "mdi-account-plus", route: "/signup" },
+  ];
+  private navItems: IVListItem[] = [
+    { name: "Recipes", icon: "mdi-book", route: "/recipes" },
+    { name: "Pantry", icon: "mdi-fridge", route: "/pantry" },
+    { name: "Order", icon: "mdi-cart", route: "/order" },
+    { name: "Settings", icon: "mdi-cog", route: "/settings" },
+  ];
+
+  private logout() {
+    this.logoutUser();
+    this.$router.push("/login");
+  }
+
+  get getAvatar() {
+    return this.getUser.avatar;
+  }
+}
+</script>

@@ -12,6 +12,7 @@ exports.AuthService = {
         if (user && (await password_utility_1.validatePassword(password, user.password))) {
             const token = this.signToken(user, username);
             user.token = token;
+            delete user.password;
             return user;
         }
         throw new Error("Username and/or password combination incorrect");
@@ -29,10 +30,12 @@ exports.AuthService = {
         });
         const token = this.signToken(user, email);
         user.token = token;
+        delete user.password;
         return user;
     },
     async checkDuplicateEmailOrUsername(email, username) {
-        const exists = await User_model_1.UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
+        // check if user with email or username already exists in db
+        const exists = await User_model_1.UserModel.findOne({ $or: [{ username }, { email }] });
         if (exists && exists.username === username && exists.email === email)
             return new Error("User with username and email already exists.");
         else if (exists && exists.email === email)

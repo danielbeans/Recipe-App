@@ -13,6 +13,7 @@ export const AuthService = {
     if (user && (await validatePassword(password, user.password))) {
       const token = this.signToken(user, username);
       user.token = token;
+      delete user.password;
       return user;
     }
     throw new Error("Username and/or password combination incorrect");
@@ -29,11 +30,13 @@ export const AuthService = {
     });
     const token = this.signToken(user, email);
     user.token = token;
+    delete user.password;
     return user;
   },
 
   async checkDuplicateEmailOrUsername(email: string, username: string) {
-    const exists = await UserModel.findOne({ $or: [{ username }, { email }] }); // check if user with email or username already exists in db
+    // check if user with email or username already exists in db
+    const exists = await UserModel.findOne({ $or: [{ username }, { email }] });
     if (exists && exists.username === username && exists.email === email)
       return new Error("User with username and email already exists.");
     else if (exists && exists.email === email)

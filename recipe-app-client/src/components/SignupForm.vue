@@ -1,5 +1,5 @@
 <template>
-  <div class="login-form max-w-xl mx-auto text-left">
+  <div class="signup-form max-w-xl mx-auto text-left md:mt-5">
     <form
       class="bg-white md:shadow-md rounded px-8 pt-6 pb-8 mb-4"
       @submit="signup"
@@ -228,7 +228,7 @@ import { AuthValidator } from "../helpers/validator";
 import ISignupForm from "../interfaces/signup.interface";
 import axios from "axios";
 
-@Component({})
+@Component({ name: "SignupForm" })
 export default class SignupForm extends Vue {
   private signupForm: ISignupForm = {
     name: "",
@@ -272,3 +272,12 @@ export default class SignupForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.center {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+</style>
