@@ -112,7 +112,7 @@ import { AuthValidator } from "../helpers/validator";
 import { IUser } from "../interfaces/user.interface";
 import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default Vue.extend({
   name: "LoginForm",
@@ -123,7 +123,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapActions(["AuthModule/setUser"]),
+    ...mapActions({ setUser: "AuthModule/setUser" }),
     async login(e: Event) {
       e.preventDefault();
       try {
@@ -132,7 +132,7 @@ export default Vue.extend({
             "http://localhost:3000/auth/login",
             this.loginForm
           );
-          this["AuthModule/setUser"](res.data.user as IUser);
+          this.setUser(res.data.user as IUser);
           this.$router.push("/recipes");
         }
       } catch (err) {
@@ -149,9 +149,6 @@ export default Vue.extend({
         this.loginForm.username.length >= 1 ||
         this.loginForm.password.length >= 1
       );
-    },
-    getUser(): IUser {
-      return this.$store.getters["AuthModule/getUser"];
     },
   },
 });
