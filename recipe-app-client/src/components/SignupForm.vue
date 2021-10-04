@@ -191,9 +191,9 @@
       <div class="flex items-center flex-wrap justify-between">
         <button
           class="
-            bg-blue-500
+            bg-red-500
             w-full
-            hover:bg-blue-400
+            hover:bg-red-400
             text-white
             font-bold
             py-2
@@ -212,8 +212,8 @@
             mt-3
             align-baseline
             font-bold
-            text-xs text-blue-500
-            hover:text-blue-400
+            text-xs text-red-500
+            hover:text-red-400
           "
           to="/login"
           >Already have an account? Login here</router-link
@@ -223,54 +223,59 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { AuthValidator } from "../helpers/validator";
 import ISignupForm from "../interfaces/signup.interface";
 import axios from "axios";
 
-@Component({ name: "SignupForm" })
-export default class SignupForm extends Vue {
-  private signupForm: ISignupForm = {
-    name: "",
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-  };
-
-  get validate() {
-    return AuthValidator.validate(this.signupForm);
-  }
-
-  get userHasTyped() {
-    return (
-      this.signupForm.username.length >= 1 ||
-      this.signupForm.password.length >= 1 ||
-      this.signupForm.confirmPassword.length >= 1 ||
-      this.signupForm.email.length >= 1 ||
-      this.signupForm.name.length >= 1
-    );
-  }
-
-  private async signup(event: Event) {
-    try {
-      event.preventDefault();
-      if (this.validate.validated) {
+export default Vue.extend({
+  data() {
+    return {
+      signupForm: {
+        name: "",
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      } as ISignupForm,
+    };
+  },
+  methods: {
+    async signup(event: Event) {
+      try {
         event.preventDefault();
-        const res = await axios.post("http://localhost:3000/auth/signup", {
-          name: this.signupForm.name,
-          email: this.signupForm.email,
-          username: this.signupForm.username,
-          password: this.signupForm.password,
-        });
-        console.log(res);
-        return res;
+        if (this.validate.validated) {
+          event.preventDefault();
+          const res = await axios.post("http://localhost:3000/auth/signup", {
+            name: this.signupForm.name,
+            email: this.signupForm.email,
+            username: this.signupForm.username,
+            password: this.signupForm.password,
+          });
+          console.log(res);
+          return res;
+        }
+      } catch (err) {
+        return new Error("Unable to create user account");
       }
-    } catch (err) {
-      return new Error("Unable to create user account");
-    }
-  }
-}
+    },
+  },
+
+  computed: {
+    validate(): any {
+      return AuthValidator.validate(this.signupForm);
+    },
+    userHasTyped(): any {
+      return (
+        this.signupForm.username.length >= 1 ||
+        this.signupForm.password.length >= 1 ||
+        this.signupForm.confirmPassword.length >= 1 ||
+        this.signupForm.email.length >= 1 ||
+        this.signupForm.name.length >= 1
+      );
+    },
+  },
+});
 </script>
 
 <style scoped>

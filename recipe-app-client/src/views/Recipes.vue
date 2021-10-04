@@ -5,14 +5,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { Getter } from "vuex-class";
-import { IUser } from "../interfaces/user.interface";
-@Component({
+import { mapGetters } from "vuex";
+
+export default {
   name: "Recipes",
-  components: {},
-})
-export default class Recipes extends Vue {
-  @Getter("AuthModule/getUser") getUser: IUser;
-}
+
+  computed: {
+    ...mapGetters({ getUser: "AuthModule/getUser" }),
+  },
+};
 </script>

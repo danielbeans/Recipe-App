@@ -83,7 +83,6 @@ export class AuthValidator {
             !(entry[0] === "validated" || entry[0] === "passwordsMatch") &&
             entry
         );
-        console.log(filtered);
         return filtered;
       },
     };

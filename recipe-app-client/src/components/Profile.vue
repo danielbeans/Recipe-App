@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 
-@Component({ name: "Profile" })
-export default class Profile extends Vue {}
+export default {
+  name: "Profile",
+};
 </script>

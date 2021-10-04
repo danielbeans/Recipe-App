@@ -34,6 +34,7 @@
       <v-list nav dense>
         <div v-if="!isLoggedIn">
           <v-list-item
+            active-class="bg-red-500 text-white"
             v-for="item in authItems"
             :key="item.name"
             link
@@ -46,6 +47,7 @@
         </div>
         <div v-else>
           <v-list-item
+            active-class="bg-red-500 text-white"
             v-for="item in navItems"
             :key="item.name"
             link
@@ -68,8 +70,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { Action, Getter, namespace } from "vuex-class";
+import Vue from "vue";
+import { mapActions, mapGetters } from "vuex";
 import { IUser } from "../interfaces/user.interface";
 
 interface IVListItem {
@@ -78,31 +80,38 @@ interface IVListItem {
   route: string;
 }
 
-const AuthModule = namespace("AuthModule");
-@Component({ name: "Sidebar" })
-export default class Sidebar extends Vue {
-  @AuthModule.Action("logoutUser") logoutUser: () => void;
-  @AuthModule.Getter("getUser") getUser: IUser;
-  @AuthModule.Getter("isLoggedIn") isLoggedIn: boolean;
-  private drawer = false;
-  private authItems: IVListItem[] = [
-    { name: "Login", icon: "mdi-account", route: "/login" },
-    { name: "Sign Up", icon: "mdi-account-plus", route: "/signup" },
-  ];
-  private navItems: IVListItem[] = [
-    { name: "Recipes", icon: "mdi-book", route: "/recipes" },
-    { name: "Pantry", icon: "mdi-fridge", route: "/pantry" },
-    { name: "Order", icon: "mdi-cart", route: "/order" },
-    { name: "Settings", icon: "mdi-cog", route: "/settings" },
-  ];
-
-  private logout() {
-    this.logoutUser();
-    this.$router.push("/login");
-  }
-
-  get getAvatar() {
-    return this.getUser.avatar;
-  }
-}
+export default Vue.extend({
+  name: "Navbar",
+  data() {
+    return {
+      drawer: false,
+      authItems: [
+        { name: "Login", icon: "mdi-account", route: "/login" },
+        { name: "Sign Up", icon: "mdi-account-plus", route: "/signup" },
+      ] as IVListItem[],
+      navItems: [
+        { name: "Recipes", icon: "mdi-book", route: "/recipes" },
+        { name: "Pantry", icon: "mdi-fridge", route: "/pantry" },
+        { name: "Order", icon: "mdi-cart", route: "/order" },
+        { name: "Settings", icon: "mdi-cog", route: "/settings" },
+      ] as IVListItem[],
+    };
+  },
+  methods: {
+    ...mapActions({ logoutUser: "AuthModule/logoutUser" }),
+    logout(): void {
+      this.logoutUser();
+      this.$router.push("/login");
+    },
+  },
+  computed: {
+    getAvatar(): string {
+      return (this.getUser as IUser).avatar;
+    },
+    ...mapGetters({
+      getUser: "AuthModule/getUser",
+      isLoggedIn: "AuthModule/isLoggedIn",
+    }),
+  },
+});
 </script>

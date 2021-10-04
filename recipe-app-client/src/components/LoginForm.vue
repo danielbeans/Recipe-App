@@ -71,13 +71,13 @@
         <button
           type="submit"
           class="
-            bg-blue-500
+            bg-red-500
             text-white
             py-2
             px-4
             rounded
             font-bold
-            hover:bg-blue-400
+            hover:bg-red-400
           "
         >
           Sign In
@@ -87,8 +87,8 @@
             inline-block
             align-baseline
             font-bold
-            text-sm text-blue-500
-            hover:text-blue-400
+            text-sm text-red-500
+            hover:text-red-400
             align-center
           "
           to="/forgot"
@@ -97,7 +97,7 @@
         </router-link>
       </div>
       <router-link
-        class="text-blue-500 text-xs font-bold hover:text-blue-400"
+        class="text-red-500 text-xs font-bold hover:text-red-400"
         to="/signup"
       >
         Don't have an account, signup here!
@@ -107,49 +107,54 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { AuthValidator } from "../helpers/validator";
-import { namespace } from "vuex-class";
 import { IUser } from "../interfaces/user.interface";
 import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
+import { mapActions } from "vuex";
 
-const AuthModule = namespace("AuthModule");
-
-@Component({ name: "LoginForm" })
-export default class LoginForm extends Vue {
-  @AuthModule.Action("setUser") setUser: (user: IUser) => void;
-  @AuthModule.Getter("isLoggedIn") isLoggedIn: boolean;
-  @AuthModule.Getter("getUser") getUser: IUser;
-  private loginForm: ILoginForm = { username: "", password: "" };
-  private error = "";
-
-  private async login(e: Event) {
-    e.preventDefault();
-    try {
-      if (this.validate.validated) {
-        const res = await axios.post(
-          "http://localhost:3000/auth/login",
-          this.loginForm
-        );
-        this.setUser(res.data.user as IUser);
-        this.$router.push("/recipes");
+export default Vue.extend({
+  name: "LoginForm",
+  data: () => {
+    return {
+      loginForm: { username: "", password: "" } as ILoginForm,
+      error: "",
+    };
+  },
+  methods: {
+    ...mapActions(["AuthModule/setUser"]),
+    async login(e: Event) {
+      e.preventDefault();
+      try {
+        if (this.validate.validated) {
+          const res = await axios.post(
+            "http://localhost:3000/auth/login",
+            this.loginForm
+          );
+          this["AuthModule/setUser"](res.data.user as IUser);
+          this.$router.push("/recipes");
+        }
+      } catch (err) {
+        return new Error("Unable to login to user account");
       }
-    } catch (err) {
-      return new Error("Unable to login to user account");
-    }
-  }
-
-  get validate() {
-    return AuthValidator.validate(this.loginForm);
-  }
-
-  get userHasTyped() {
-    return (
-      this.loginForm.username.length >= 1 || this.loginForm.password.length >= 1
-    );
-  }
-}
+    },
+  },
+  computed: {
+    validate() {
+      return AuthValidator.validate(this.loginForm);
+    },
+    userHasTyped() {
+      return (
+        this.loginForm.username.length >= 1 ||
+        this.loginForm.password.length >= 1
+      );
+    },
+    getUser(): IUser {
+      return this.$store.getters["AuthModule/getUser"];
+    },
+  },
+});
 </script>
 <style lang="scss" scoped>
 .center {
