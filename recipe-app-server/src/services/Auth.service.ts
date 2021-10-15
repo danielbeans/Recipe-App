@@ -19,9 +19,13 @@ export const AuthService = {
     throw new Error("Username and/or password combination incorrect");
   },
   async createUser({ name, username, password, email }: ISignup) {
-    const hasDuplicate = this.checkDuplicateEmailOrUsername(email, username);
+    const hasDuplicate = await this.checkDuplicateEmailOrUsername(
+      email,
+      username
+    );
     if (hasDuplicate) throw hasDuplicate;
     email = email.toLowerCase();
+    console.log(email);
     const user: IUser = await UserModel.create({
       name,
       email,
