@@ -1,4 +1,4 @@
-import IPantry from "@/interfaces/pantry.interface";
+import IPantry from "@/interfaces/pantry-item.interface";
 import { GetterTree, MutationTree, ActionTree } from "vuex";
 
 class PantryState {

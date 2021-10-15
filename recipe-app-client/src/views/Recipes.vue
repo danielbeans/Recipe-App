@@ -9,7 +9,6 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Recipes",
-
   computed: {
     ...mapGetters({ getUser: "AuthModule/getUser" }),
   },

@@ -7,9 +7,9 @@ export const AuthController = {
   async login(req: Request, res: Response) {
     try {
       const user = await AuthService.login(req.body as ILogin); // logs the user
-      res.status(201).json({ user }); // on successful login, return jwt
+      res.status(200).json({ user }); // on successful login, return jwt
     } catch (err) {
-      res.status(400).send({ error: (err as Error).message });
+      res.status(401).send({ error: (err as Error).message });
     }
   },
   async signup(req: Request, res: Response) {

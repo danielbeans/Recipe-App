@@ -21,7 +21,9 @@ UserSchema.pre("save", async function () {
         if (this.isModified("password") || this.isNew) {
             const hash = await password_utility_1.hashPassword(this.password); // this refers to the current model being created
             this.password = hash;
-            this.avatar = jdenticon_1.default.toSvg(uuid_1.v4(), 200);
+            this.avatar = jdenticon_1.default.toSvg(uuid_1.v4(), 200, {
+                hues: [],
+            });
         }
     }
     catch (err) {
