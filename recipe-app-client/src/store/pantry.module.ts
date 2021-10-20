@@ -1,8 +1,8 @@
-import IPantry from "@/interfaces/pantry-item.interface";
+import IPantryItem from "@/interfaces/pantry-item.interface";
 import { GetterTree, MutationTree, ActionTree } from "vuex";
 
 class PantryState {
-  pantry: IPantry | null = null;
+  pantry: IPantryItem[] | null = null;
 }
 
 const mutations = <MutationTree<PantryState>>{};
