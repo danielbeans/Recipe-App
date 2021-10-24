@@ -1,5 +1,9 @@
 <template>
-  <v-alert class="modal" type="success" :value="alert">
+  <v-alert
+    class="w-1/3 p-5 left-1/2 absolute transform -translate-x-1/2 bottom-0"
+    type="success"
+    :value="alert"
+  >
     You have successfully logged in!
   </v-alert>
 </template>
@@ -21,16 +25,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-.modal {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-}
-</style>
