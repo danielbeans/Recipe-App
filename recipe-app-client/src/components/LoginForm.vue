@@ -80,7 +80,7 @@
             hover:bg-red-400
           "
         >
-          Sign In
+          Log In
         </button>
         <router-link
           class="
