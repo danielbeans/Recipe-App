@@ -13,4 +13,8 @@ export default {
   auth: {
     secret: process.env.AUTH_SECRET,
   },
+  recipes: {
+    app_id: process.env.RECIPES_APP_ID,
+    app_key: process.env.RECIPES_APP_KEY,
+  },
 };

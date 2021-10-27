@@ -1,6 +1,6 @@
 <template>
   <section class="mt-5 text-xl text-center">
-    This is Recipes page for user: {{ getUser.username }}
+    <RecipeList />
     <Modal />
   </section>
 </template>
@@ -8,10 +8,10 @@
 <script lang="ts">
 import { mapGetters } from "vuex";
 import Modal from "../components/Modal.vue";
-
+import RecipeList from "../components/RecipeList.vue";
 export default {
   name: "Recipes",
-  components: { Modal },
+  components: { Modal, RecipeList },
   computed: {
     ...mapGetters({ getUser: "AuthModule/getUser" }),
   },
