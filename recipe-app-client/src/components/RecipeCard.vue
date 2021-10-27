@@ -20,7 +20,7 @@
     <v-card-text class="text-left">
       <v-row align="center" class="mx-0">
         <div>Calories per serving:</div>
-        <div class="grey--text ms-2">{{ getCaloriesPerServing }}</div>
+        <div class="grey--text ms-2">{{ getCaloriesPerServing }} kcal</div>
       </v-row>
       <v-row align="center" class="mx-0">
         <div>Servings:</div>
@@ -64,7 +64,7 @@ export default Vue.extend({
   },
   computed: {
     getCaloriesPerServing() {
-      return this.total_calories / this.servings;
+      return Math.round(this.total_calories / this.servings);
     },
     getHealthLabels() {
       if (!this.health_labels) return;

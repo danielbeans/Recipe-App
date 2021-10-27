@@ -34,7 +34,11 @@
         :favorited="recipe.favorited"
         @favorite="favoriteRecipe"
       />
-      <RecipeCard style="visibility: hidden" v-if="recipes.length % 2 !== 0" />
+      <RecipeCard
+        class="mx-10"
+        style="visibility: hidden"
+        v-if="recipes.length % 2 !== 0"
+      />
     </v-container>
     <v-progress-circular
       class="mt-10"
@@ -43,6 +47,10 @@
       color="primary"
       v-else-if="loading"
     ></v-progress-circular>
+    <h5 v-else class="mt-5 text-gray-500 text-lg">
+      No recipes to display, try searching for recipes using the text field
+      above.
+    </h5>
   </v-container>
 </template>
 <script lang="ts">
@@ -75,6 +83,7 @@ export default Vue.extend({
           ingredients: this.ingredients,
         })
       ).data;
+      console.log(data);
       this.recipes = data.recipes.map((recipe) => ({
         ...recipe,
         favorited: false,
