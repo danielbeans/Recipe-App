@@ -114,6 +114,7 @@ export default Vue.extend({
           JSON.stringify(page.ingredients) === JSON.stringify(this.ingredients)
       );
       if (!ingredientMatch) this.resetPageState();
+      data.recipes.forEach((recipe) => (recipe["favorited"] = false));
       this.pages.push(data);
       this.loading = false;
     },
@@ -133,6 +134,7 @@ export default Vue.extend({
           { withCredentials: true }
         )
       ).data;
+      data.recipes.forEach((recipe) => (recipe["favorited"] = false));
       this.loading = false;
       return data;
     },
@@ -150,6 +152,7 @@ export default Vue.extend({
     },
     favoriteRecipe(id: string) {
       const curPage = this.pages[this.currentPageIndex];
+      console.log(curPage);
       const indexOfRecipe: number = curPage.recipes.findIndex(
         (recipe) => recipe.uri === id
       );
