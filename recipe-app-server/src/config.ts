@@ -17,4 +17,7 @@ export default {
     app_id: process.env.RECIPES_APP_ID,
     app_key: process.env.RECIPES_APP_KEY,
   },
+  session: {
+    secret: process.env.SESSION_SECRET,
+  },
 };

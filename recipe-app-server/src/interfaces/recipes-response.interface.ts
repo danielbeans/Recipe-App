@@ -1,12 +1,12 @@
 import { Recipe } from "./recipe.interface";
 
-interface RecipesResponseLinks {
-  next: { href: string; title?: string };
+interface RecipeResponseLinkMap {
+  [key: string]: { href: string; title?: string };
 }
-export default interface RecipesResponse {
+export default interface RecipeResponse {
   from: number;
   to: number;
-  count: 25;
-  _links: RecipesResponseLinks;
-  hits: Array<{ recipe: Recipe; _links: RecipesResponse }>;
+  count: number;
+  _links: RecipeResponseLinkMap;
+  hits: Array<{ recipe: Recipe; _links: RecipeResponseLinkMap }>;
 }

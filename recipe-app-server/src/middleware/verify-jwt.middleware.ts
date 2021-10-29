@@ -11,6 +11,7 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, config.auth.secret) as JwtPayload;
     req.user = decoded;
   } catch (err) {
+    console.log(err); // TODO when user makes a request with invalid token, sign them out and take them to login page to relogin.
     return res.status(401).send({ error: "Token is invalid" });
   }
   next();

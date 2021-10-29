@@ -14,13 +14,26 @@
     <h3 class="my-4 font-bold">Recipes</h3>
     <v-divider />
     <v-container
-      v-if="recipes.length > 0"
+      v-if="
+        !loading &&
+        pages[currentPageIndex] &&
+        pages[currentPageIndex].recipes.length > 0
+      "
       flex
       class="flex-wrap justify-center"
     >
+      <v-container flex class="mx-10">
+        <v-btn v-if="showPrevBtn" dense depressed @click="goToPrevPage"
+          ><v-icon>mdi-arrow-left</v-icon></v-btn
+        >
+        <v-spacer />
+        <v-btn dense depressed v-if="showNextBtn" @click="goToNextPage"
+          ><v-icon>mdi-arrow-right</v-icon></v-btn
+        ></v-container
+      >
       <RecipeCard
         class="mx-10"
-        v-for="recipe in recipes"
+        v-for="recipe in pages[currentPageIndex].recipes"
         :key="recipe.uri"
         :id="recipe.uri"
         :name="recipe.label"
@@ -37,7 +50,7 @@
       <RecipeCard
         class="mx-10"
         style="visibility: hidden"
-        v-if="recipes.length % 2 !== 0"
+        v-if="pages[currentPageIndex].recipes.length % 2 !== 0"
       />
     </v-container>
     <v-progress-circular
@@ -57,38 +70,91 @@
 import Vue from "vue";
 import RecipeCard from "./RecipeCard.vue";
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default Vue.extend({
   components: { RecipeCard },
   data() {
     return {
-      recipes: [],
-      ingredients: ["Chicken"],
-      ingredient: "",
-      search: null,
+      pages: [],
+      currentPageIndex: 0,
+      ingredients: [],
       loading: false,
+      search: null,
     };
   },
-  methods: {
-    favoriteRecipe(id: string) {
-      const indexOfRecipe: number = this.recipes.findIndex(
-        (recipe) => recipe.uri === id
-      );
-      this.recipes[indexOfRecipe].favorited =
-        !this.recipes[indexOfRecipe].favorited;
+  computed: {
+    ...mapGetters({
+      getUser: "AuthModule/getUser",
+      isLoggedIn: "AuthModule/isLoggedIn",
+    }),
+    showPrevBtn() {
+      return this.pages.length > 0 && this.currentPageIndex !== 0;
     },
+    showNextBtn() {
+      return (
+        this.pages.length > 0 && this.pages[this.currentPageIndex].hasNextPage
+      );
+    },
+  },
+  methods: {
     async getRecipes() {
       this.loading = true;
       const data = (
-        await axios.post("http://localhost:3000/recipes/search", {
-          ingredients: this.ingredients,
-        })
+        await axios.post(
+          "http://localhost:3000/recipes/search",
+          {
+            token: this.getUser.token,
+            ingredients: this.ingredients,
+          },
+          { withCredentials: true }
+        )
       ).data;
-      console.log(data);
-      this.recipes = data.recipes.map((recipe) => ({
-        ...recipe,
-        favorited: false,
-      }));
+      const ingredientMatch = this.pages.find(
+        (page) =>
+          JSON.stringify(page.ingredients) === JSON.stringify(this.ingredients)
+      );
+      if (!ingredientMatch) this.resetPageState();
+      this.pages.push(data);
       this.loading = false;
+    },
+    async getNextPageOfRecipes() {
+      this.loading = true;
+      if (this.currentPageIndex !== this.pages.length - 1) {
+        this.loading = false;
+        return;
+      }
+      const data = (
+        await axios.post(
+          "http://localhost:3000/recipes/search",
+          {
+            token: this.getUser.token,
+            ingredients: [],
+          },
+          { withCredentials: true }
+        )
+      ).data;
+      this.loading = false;
+      return data;
+    },
+    async goToNextPage() {
+      const nextPage = await this.getNextPageOfRecipes();
+      if (nextPage) this.pages.push(nextPage);
+      this.currentPageIndex++;
+    },
+    goToPrevPage() {
+      if (this.currentPageIndex > 0) this.currentPageIndex--;
+    },
+    resetPageState() {
+      this.pages = [];
+      this.currentPageIndex = 0;
+    },
+    favoriteRecipe(id: string) {
+      const curPage = this.pages[this.currentPageIndex];
+      const indexOfRecipe: number = curPage.recipes.findIndex(
+        (recipe) => recipe.uri === id
+      );
+      curPage.recipes[indexOfRecipe].favorited =
+        !curPage.recipes[indexOfRecipe].favorited;
     },
   },
 });

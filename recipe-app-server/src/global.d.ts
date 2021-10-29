@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
-
+import session, { Session } from "express-session";
 declare global {
   export interface JwtPayload {
     user_id: string;
@@ -8,6 +8,7 @@ declare global {
   }
   declare namespace Express {
     export interface Request {
+      session: Session;
       user?: JwtPayload;
     }
   }
