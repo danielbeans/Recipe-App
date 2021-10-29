@@ -9,7 +9,9 @@
     </template>
     <v-img height="250" :src="image"></v-img>
     <v-card-title
-      >{{ name }}
+      ><span class="text-truncate w-4/5 whitespace-nowrap text-left">{{
+        name
+      }}</span>
       <v-spacer />
       <span class="pa-0 flex justify-end items-center">
         <v-icon dense>mdi-clock</v-icon>
@@ -26,7 +28,6 @@
         <div>Servings:</div>
         <div class="grey--text ms-2">{{ servings }}</div>
       </v-row>
-
       <div class="mt-2 text-subtitle-1 text-truncate">
         {{ getHealthLabels }}
       </div>
