@@ -20,7 +20,4 @@ export const AuthController = {
       res.status(400).send({ error: (err as Error).message });
     }
   },
-  verify(_, res: Response) {
-    res.status(201).send();
-  },
 };
