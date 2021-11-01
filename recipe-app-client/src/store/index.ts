@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
 import { AuthModule } from "./auth.module";
 import { PantryModule } from "./pantry.module";
-
+import { RecipeModule } from "./recipe.module";
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersistence({
@@ -12,6 +12,6 @@ const vuexLocal = new VuexPersistence({
 });
 
 export default new Vuex.Store({
-  modules: { AuthModule, PantryModule },
+  modules: { AuthModule, PantryModule, RecipeModule },
   plugins: [vuexLocal.plugin],
 });

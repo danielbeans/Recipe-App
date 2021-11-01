@@ -157,6 +157,7 @@ export default Vue.extend({
     ...mapActions({
       setUser: "AuthModule/setUser",
       setModalDisplay: "AuthModule/setModalDisplay",
+      setFavoriteRecipes: "RecipeModule/setFavoriteRecipes",
     }),
     async login(e: Event): Promise<void | Error> {
       e.preventDefault();
@@ -168,6 +169,7 @@ export default Vue.extend({
           );
           this.setUser(res.data.user as IUser);
           this.setModalDisplay(true);
+          this.setFavoriteRecipes();
           this.$router.push("/recipes");
         }
       } catch (err) {

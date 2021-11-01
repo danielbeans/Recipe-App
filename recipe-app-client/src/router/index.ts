@@ -2,12 +2,9 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
-import Home from "../views/Home.vue";
 import store from "../store/index";
 import Recipes from "../views/Recipes.vue";
 import Pantry from "../views/Pantry.vue";
-import { AUTH_ROUTES } from "@shared/routes";
-import axios from "axios";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [

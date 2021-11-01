@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import config from "@config/env";
+import { __classPrivateFieldGet } from "tslib";
 
 // verifies the JWT passed into a given route.
 export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {

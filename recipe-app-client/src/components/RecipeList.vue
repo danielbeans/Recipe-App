@@ -71,10 +71,12 @@
 <script lang="ts">
 import Vue from "vue";
 import axios, { AxiosError } from "axios";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import RecipeCard from "@/components/RecipeCard.vue";
 import { IRecipePage } from "@shared/interfaces/recipe-page.interface";
 import { RECIPE_ROUTES } from "@shared/routes";
+import { IRecipe } from "@shared/interfaces/recipe.interface";
+
 export default Vue.extend({
   components: { RecipeCard },
   data() {
@@ -92,6 +94,7 @@ export default Vue.extend({
       getUser: "AuthModule/getUser",
       isLoggedIn: "AuthModule/isLoggedIn",
       getPantry: "PantryModule/getPantry",
+      getFavoriteRecipes: "RecipeModule/getFavoriteRecipes",
     }),
     showPrevBtn(): boolean {
       return this.pages.length > 0 && this.currentPageIndex !== 0;
@@ -106,6 +109,7 @@ export default Vue.extend({
     },
   },
   methods: {
+    ...mapActions({ _favoriteRecipe: "RecipeModule/favoriteRecipe" }),
     async getRecipes(): Promise<void> {
       this.loading = true;
       try {
@@ -125,9 +129,10 @@ export default Vue.extend({
             JSON.stringify(this.ingredients)
         );
         if (!ingredientMatch) this.resetPageState();
-        data.recipes.forEach((recipe) => (recipe["favorited"] = false));
         this.pages.push(data);
         this.error = "";
+        this.setDefaultFavorite();
+        this.updateFavorites();
       } catch (err) {
         this.error = (err as AxiosError).response?.data.error;
       }
@@ -149,7 +154,6 @@ export default Vue.extend({
           { withCredentials: true }
         )
       ).data;
-      data.recipes.forEach((recipe) => (recipe["favorited"] = false));
       this.loading = false;
       return data;
     },
@@ -157,6 +161,33 @@ export default Vue.extend({
       const nextPage = await this.getNextPageOfRecipes();
       if (nextPage) this.pages.push(nextPage);
       this.currentPageIndex++;
+      this.setDefaultFavorite();
+      this.updateFavorites();
+    },
+    async favoriteRecipe(id: string): Promise<void> {
+      const curPage = this.pages[this.currentPageIndex];
+      const indexOfRecipe = curPage.recipes.findIndex(
+        (recipe) => recipe.uri === id
+      );
+      const recipeToFavorite = curPage.recipes[indexOfRecipe];
+      recipeToFavorite.favorited = !recipeToFavorite.favorited;
+      await this._favoriteRecipe(curPage.recipes[indexOfRecipe]);
+    },
+    updateFavorites() {
+      const curPage = this.pages[this.currentPageIndex];
+      curPage.recipes.forEach((recipe) => {
+        const foundRecipe: IRecipe = this.getFavoriteRecipes.find(
+          (r) => r.uri === recipe.uri
+        );
+        if (foundRecipe) recipe.favorited = foundRecipe.favorited;
+      });
+    },
+    setDefaultFavorite() {
+      const curPage = this.pages[this.currentPageIndex];
+      curPage.recipes = curPage.recipes.map((recipe) => ({
+        ...recipe,
+        favorited: false,
+      }));
     },
     goToPrevPage(): void {
       if (this.currentPageIndex > 0) this.currentPageIndex--;
@@ -164,15 +195,6 @@ export default Vue.extend({
     resetPageState(): void {
       this.pages = [];
       this.currentPageIndex = 0;
-    },
-    favoriteRecipe(id: string): void {
-      const curPage = this.pages[this.currentPageIndex];
-      console.log(curPage);
-      const indexOfRecipe: number = curPage.recipes.findIndex(
-        (recipe) => recipe.uri === id
-      );
-      curPage.recipes[indexOfRecipe].favorited =
-        !curPage.recipes[indexOfRecipe].favorited;
     },
   },
 });

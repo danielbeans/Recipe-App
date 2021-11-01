@@ -8,4 +8,6 @@ export const RECIPE_ROUTES = {
   BASE: "/recipes",
   SEARCH: "/search",
   NEXT_PAGE: "/next",
+  FAVORITE: "/favorite",
+  FAVORITES: "/favorites",
 };

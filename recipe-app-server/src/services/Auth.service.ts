@@ -3,8 +3,9 @@ import { UserModel } from "@models/User.model";
 import { validatePassword } from "@util/password.utility";
 import { ILogin } from "@interfaces/login.interface";
 import { ISignup } from "@interfaces/signup.interface";
-import config from "@config/env";
 import jwt from "jsonwebtoken";
+import { decodeJWT } from "../util/token.utility";
+import config from "@config/env";
 
 export const AuthService = {
   EXPIRATION: "2h",
@@ -13,7 +14,7 @@ export const AuthService = {
     // if user exists and passwords match
     if (user && (await validatePassword(password, user.password))) {
       const token = this.signToken(user, username); // sign new token
-      const { exp } = jwt.verify(token, config.auth.secret) as JwtPayload; // get expiration time for token
+      const { exp } = decodeJWT(token); // get expiration time for token
       user.password = undefined; // remove password hash from user object before sending to client
       const { _id, name, email, avatar } = user;
       return {
@@ -44,7 +45,7 @@ export const AuthService = {
       password,
     }); // create new user with given credentials
     const token = this.signToken(user, email); // sign new token for user
-    const { exp } = jwt.verify(token, config.auth.secret) as JwtPayload; // get expiration time for token
+    const { exp } = decodeJWT(token) as JwtPayload; // get expiration time for token
     user.jwt = { token, exp }; // set token on user object for future API requests
     user.password = undefined; // remove password hash from user object before sending to client
     const { _id, avatar } = user;

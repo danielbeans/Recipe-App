@@ -11,6 +11,7 @@ const UserSchema = new Schema<IUser>({
   username: { type: String, required: true },
   password: { type: String, required: true },
   avatar: { type: String, required: false },
+  favorite_recipes: [Object],
 });
 
 // before saving our document, we want to hash the inputted password
@@ -22,6 +23,7 @@ UserSchema.pre("save", async function () {
       this.avatar = jdenticon.toSvg(uuidv4(), 200, {
         hues: [],
       });
+      this.favorite_recipe = [];
     }
   } catch (err) {
     console.error(err);

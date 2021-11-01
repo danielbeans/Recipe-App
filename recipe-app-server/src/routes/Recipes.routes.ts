@@ -11,5 +11,15 @@ export function RecipeRoutes() {
     verifyJwt,
     RecipeController.getNextPageOfRecipes
   );
+  router.post(
+    RECIPE_ROUTES.FAVORITE,
+    verifyJwt,
+    RecipeController.favoriteRecipe
+  );
+  router.get(
+    RECIPE_ROUTES.FAVORITES,
+    verifyJwt,
+    RecipeController.getFavoriteRecipes
+  );
   return router;
 }
