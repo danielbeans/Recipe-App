@@ -4,5 +4,5 @@ export interface IUser {
   readonly email: string;
   readonly username: string;
   readonly avatar: string;
-  token: string;
+  jwt: { token: string; exp: number };
 }

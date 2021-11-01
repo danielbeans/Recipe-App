@@ -29,7 +29,7 @@ export default Vue.extend({
     ...mapGetters({ getModalDisplay: "AuthModule/getModalDisplay" }),
   },
   methods: { ...mapActions({ setModalDisplay: "AuthModule/setModalDisplay" }) },
-  created() {
+  created(): void {
     setTimeout(() => {
       this.alert = false;
       this.setModalDisplay(false);

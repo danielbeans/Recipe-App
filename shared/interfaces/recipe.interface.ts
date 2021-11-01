@@ -25,6 +25,7 @@ export interface IRecipe {
   source: string;
   url: string;
   shareAs: string;
+  favorited: boolean;
   yield: number;
   dietLabels: string[];
   healthLabels: string[];

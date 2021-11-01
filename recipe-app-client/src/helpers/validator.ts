@@ -1,13 +1,13 @@
 import ISignupForm from "../interfaces/signup.interface";
 import ILoginForm from "../interfaces/login.interface";
 
-interface AuthValidation {
+export interface AuthValidation {
   username: boolean;
   password: boolean;
   validated: boolean;
 }
 
-interface SignupValidation extends AuthValidation {
+export interface SignupValidation extends AuthValidation {
   name: boolean;
   email: boolean;
   confirmPassword: boolean;

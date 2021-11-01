@@ -47,24 +47,16 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    try {
-      const res = await axios.post(AUTH_ROUTES.BASE + AUTH_ROUTES.VERIFY, {
-        token: store.getters["AuthModule/getUser"]?.token,
-      });
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
+    if (store.getters["AuthModule/getUser"]?.jwt?.exp < Date.now() / 1000) {
       store.dispatch("AuthModule/logoutUser");
       next({ path: "/login", query: { redirect: to.fullPath } });
     }
     const isAuth = store.getters["AuthModule/isLoggedIn"];
-    console.log(isAuth);
     if (!isAuth) {
       next({ path: "/login", query: { redirect: to.fullPath } });
     }
     next();
   }
-  console.log("awgawah");
   next();
 });
 

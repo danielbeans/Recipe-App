@@ -46,11 +46,6 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-declare module "vue/types/vue" {
-  interface Vue {
-    id: string;
-  }
-}
 export default Vue.extend({
   props: {
     id: String,
@@ -64,17 +59,17 @@ export default Vue.extend({
     total_time: Number,
   },
   methods: {
-    favorite() {
+    favorite(): void {
       this.$emit("favorite", this.id);
     },
   },
   computed: {
-    getCaloriesPerServing() {
+    getCaloriesPerServing(): number {
       return Math.round(this.total_calories / this.servings);
     },
-    getHealthLabels() {
+    getHealthLabels(): void | string {
       if (!this.health_labels) return;
-      const temp = this.health_labels;
+      const temp = this.health_labels as string[];
       temp.length = 3;
       return temp.filter((item) => !!item).join(", ");
     },

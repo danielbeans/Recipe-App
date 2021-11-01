@@ -5,6 +5,7 @@ declare global {
   export interface JwtPayload {
     user_id: string;
     email: string;
+    exp: number;
   }
   declare namespace Express {
     export interface Request {

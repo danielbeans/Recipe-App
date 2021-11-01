@@ -1,1 +1,4 @@
-export default interface IPantryItem {}
+export default interface IPantryItem {
+  readonly id: string;
+  name: string;
+}

@@ -6,7 +6,6 @@ enum MutationTypes {
   LOGOUT_USER = "LOGOUT_USER",
   SET_MODAL_DISPLAY = "SET_MODAL_DISPLAY",
 }
-
 class AuthState {
   user: IUser | null = null;
   modalDisplay: boolean;
@@ -43,7 +42,7 @@ const getters = <GetterTree<AuthState, any>>{
     return state.modalDisplay;
   },
   isLoggedIn(state: AuthState) {
-    return !!state.user?.token;
+    return !!state.user?.jwt.token;
   },
   getUser(state: AuthState) {
     return state.user;

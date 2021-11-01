@@ -68,26 +68,16 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-declare module "vue/types/vue" {
-  interface Vue {
-    pages: any[];
-    currentPageIndex: number;
-    ingredients: any[];
-    loading: boolean;
-    search: any;
-    getNextPageOfRecipes: () => any;
-    resetPageState: () => any;
-  }
-}
-import RecipeCard from "@/components/RecipeCard.vue";
 import axios from "axios";
 import { mapGetters } from "vuex";
+import RecipeCard from "@/components/RecipeCard.vue";
+import { IRecipePage } from "@shared/interfaces/recipe-page.interface";
 import { RECIPE_ROUTES } from "@shared/routes";
 export default Vue.extend({
   components: { RecipeCard },
   data() {
     return {
-      pages: [],
+      pages: [] as IRecipePage[],
       currentPageIndex: 0,
       ingredients: [],
       loading: false,
@@ -99,23 +89,23 @@ export default Vue.extend({
       getUser: "AuthModule/getUser",
       isLoggedIn: "AuthModule/isLoggedIn",
     }),
-    showPrevBtn() {
+    showPrevBtn(): boolean {
       return this.pages.length > 0 && this.currentPageIndex !== 0;
     },
-    showNextBtn() {
+    showNextBtn(): boolean {
       return (
         this.pages.length > 0 && this.pages[this.currentPageIndex].hasNextPage
       );
     },
   },
   methods: {
-    async getRecipes() {
+    async getRecipes(): Promise<void> {
       this.loading = true;
-      const data = (
+      const data: IRecipePage = (
         await axios.post(
           RECIPE_ROUTES.BASE + RECIPE_ROUTES.SEARCH,
           {
-            token: this.getUser.token,
+            token: this.getUser.jwt.token,
             ingredients: this.ingredients,
           },
           { withCredentials: true }
@@ -130,18 +120,17 @@ export default Vue.extend({
       this.pages.push(data);
       this.loading = false;
     },
-    async getNextPageOfRecipes() {
+    async getNextPageOfRecipes(): Promise<void | IRecipePage> {
       this.loading = true;
       if (this.currentPageIndex !== this.pages.length - 1) {
         this.loading = false;
         return;
       }
-      console.log();
-      const data = (
+      const data: IRecipePage = (
         await axios.post(
-          "/recipes/search",
+          RECIPE_ROUTES.BASE + RECIPE_ROUTES.SEARCH,
           {
-            token: this.getUser.token,
+            token: this.getUser.jwt.token,
             ingredients: [],
           },
           { withCredentials: true }
@@ -151,19 +140,19 @@ export default Vue.extend({
       this.loading = false;
       return data;
     },
-    async goToNextPage() {
+    async goToNextPage(): Promise<void> {
       const nextPage = await this.getNextPageOfRecipes();
       if (nextPage) this.pages.push(nextPage);
       this.currentPageIndex++;
     },
-    goToPrevPage() {
+    goToPrevPage(): void {
       if (this.currentPageIndex > 0) this.currentPageIndex--;
     },
-    resetPageState() {
+    resetPageState(): void {
       this.pages = [];
       this.currentPageIndex = 0;
     },
-    favoriteRecipe(id: string) {
+    favoriteRecipe(id: string): void {
       const curPage = this.pages[this.currentPageIndex];
       console.log(curPage);
       const indexOfRecipe: number = curPage.recipes.findIndex(

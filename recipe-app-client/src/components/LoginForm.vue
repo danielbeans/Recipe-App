@@ -1,7 +1,21 @@
 <template>
-  <section class="login-form w-full md:max-w-xl mx-auto text-left mt-5">
+  <section
+    class="
+      login-form
+      w-full
+      md:max-w-xl
+      mx-auto
+      text-left
+      mt-5
+      absolute
+      top-1/2
+      left-1/2
+      transform
+      -translate-x-1/2 -translate-y-1/2
+    "
+  >
     <form
-      class="bg-white md:shadow-md md:px-10 rounded py-10 mx-10"
+      class="bg-white md:shadow-md md:px-10 rounded pt-10 pb-5 mx-10"
       @submit="login"
     >
       <h3 class="text-xl mb-4 text-gray-600 text-center">Login</h3>
@@ -67,12 +81,13 @@
           >
         </p>
       </div>
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center flex-wrap justify-between">
         <button
           type="submit"
           class="
             bg-red-500
             text-white
+            w-full
             py-2
             px-4
             rounded
@@ -85,30 +100,45 @@
         <router-link
           class="
             inline-block
+            text-center
             align-baseline
+            mt-3
             font-bold
             text-sm text-red-500
             hover:text-red-400
             align-center
+            w-full
           "
           to="/forgot"
         >
           Forgot Password?
         </router-link>
+        <router-link
+          class="
+            w-full
+            text-center
+            mt-3
+            align-baseline
+            font-bold
+            text-xs text-red-500
+            hover:text-red-400
+          "
+          to="/signup"
+        >
+          Don't have an account, signup here!
+        </router-link>
       </div>
-      <router-link
-        class="text-red-500 text-xs font-bold hover:text-red-400"
-        to="/signup"
-      >
-        Don't have an account, signup here!
-      </router-link>
     </form>
   </section>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { AuthValidator } from "../helpers/validator";
+import {
+  AuthValidation,
+  AuthValidator,
+  SignupValidation,
+} from "../helpers/validator";
 import { IUser } from "../interfaces/user.interface";
 import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
@@ -117,7 +147,7 @@ import { AUTH_ROUTES } from "@shared/routes";
 
 export default Vue.extend({
   name: "LoginForm",
-  data: () => {
+  data() {
     return {
       loginForm: { username: "", password: "" } as ILoginForm,
       error: "",
@@ -128,7 +158,7 @@ export default Vue.extend({
       setUser: "AuthModule/setUser",
       setModalDisplay: "AuthModule/setModalDisplay",
     }),
-    async login(e: Event) {
+    async login(e: Event): Promise<void | Error> {
       e.preventDefault();
       try {
         if (this.validate.validated) {
@@ -146,10 +176,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    validate() {
+    validate(): AuthValidation | SignupValidation {
       return AuthValidator.validate(this.loginForm);
     },
-    userHasTyped() {
+    userHasTyped(): boolean {
       return (
         this.loginForm.username.length >= 1 ||
         this.loginForm.password.length >= 1

@@ -9,13 +9,13 @@
       <v-list class="mb-3">
         <div v-if="pantry.length">
           <PantryListItem
-            v-for="(item, index) in pantry"
+            v-for="item in pantry"
             @setSelected="setSelected"
             @setItem="setItem"
             :selected="selected"
-            :key="item + index"
-            :item="item"
-            :index="index"
+            :key="item.id"
+            :id="item.id"
+            :name="item.name"
             :editParent="edit"
             :removeParent="remove"
           />
@@ -54,8 +54,9 @@
 </template>
 
 <script lang="ts">
+import IPantryItem from "@/interfaces/pantry-item.interface";
 import Vue from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import PantryListItem from "./PantryListItem.vue";
 export default Vue.extend({
   components: {
@@ -63,39 +64,42 @@ export default Vue.extend({
   },
   data() {
     return {
-      pantry: [
-        "apples",
-        "bananas",
-        "grapes",
-        "blueberry",
-        "pineapples",
-        "celery",
-      ],
       startAdding: false,
       selected: "",
       itemToAdd: "",
     };
   },
   computed: {
-    ...mapGetters({ getUser: "AuthModule/getUser" }),
+    ...mapGetters({
+      getUser: "AuthModule/getUser",
+      getPantry: "PantryModule/getPantry",
+    }),
+    pantry(): void {
+      return this.getPantry;
+    },
   },
   methods: {
-    remove(index: number) {
-      this.pantry.splice(index, 1);
+    ...mapActions({
+      addPantryItem: "PantryModule/addPantryItem",
+      removePantryItem: "PantryModule/removePantryItem",
+      editPantryItem: "PantryModule/editPantryItem",
+    }),
+    remove(id: string): void {
+      this.removePantryItem(id);
     },
-    edit() {
+    edit(): void {
       this.selected = "";
     },
-    add() {
-      this.pantry.push(this.itemToAdd);
+    add(): void {
+      this.addPantryItem(this.itemToAdd);
       this.startAdding = false;
       this.itemToAdd = "";
     },
-    setItem(newItem: string, index: number) {
-      this.pantry[index] = newItem;
+    setItem(newItem: IPantryItem): void {
+      this.editPantryItem(newItem);
     },
-    setSelected(item: string) {
-      this.selected = item;
+    setSelected(id: string): void {
+      this.selected = id;
     },
   },
 });
