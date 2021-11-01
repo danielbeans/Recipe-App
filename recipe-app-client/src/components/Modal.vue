@@ -1,11 +1,11 @@
 <template>
   <v-alert
-    v-if="getModalDisplay"
-    class="w-1/3 p-5 left-1/2 absolute transform -translate-x-1/2 bottom-0"
-    type="success"
+    v-if="isNotLogin || getModalDisplay"
+    class="p-5"
+    :type="type"
     :value="alert"
   >
-    You have successfully logged in!
+    {{ text }}
   </v-alert>
 </template>
 
@@ -15,6 +15,11 @@ import { mapActions, mapGetters } from "vuex";
 
 export default Vue.extend({
   name: "Modal",
+  props: {
+    type: String,
+    text: String,
+    isNotLogin: Boolean,
+  },
   data() {
     return {
       alert: true,

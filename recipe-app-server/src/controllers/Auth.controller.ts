@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/Auth.service";
-import ISignup from "../interfaces/signup.interface";
-import ILogin from "../interfaces/login.interface";
+import { AuthService } from "@services/Auth.service";
+import { ISignup } from "@interfaces/signup.interface";
+import { ILogin } from "@interfaces/login.interface";
 
 export const AuthController = {
   async login(req: Request, res: Response) {
@@ -19,5 +19,8 @@ export const AuthController = {
     } catch (err) {
       res.status(400).send({ error: (err as Error).message });
     }
+  },
+  verify(_, res: Response) {
+    res.status(201).send();
   },
 };

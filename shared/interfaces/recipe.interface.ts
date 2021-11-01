@@ -1,4 +1,4 @@
-interface Ingredient {
+interface IIngredient {
   text: string;
   quantity: number;
   measure: string;
@@ -9,16 +9,16 @@ interface Ingredient {
   image: string;
 }
 
-interface Nutrient {
+interface INutrient {
   label: string;
   quantity: number;
   unit: string;
 }
-interface NutrientMap {
-  [nutrient_type: string]: Nutrient;
+interface INutrientMap {
+  [nutrient_type: string]: INutrient;
 }
 
-export interface Recipe {
+export interface IRecipe {
   uri: string;
   label: string;
   image: string;
@@ -30,14 +30,14 @@ export interface Recipe {
   healthLabels: string[];
   cautions: string[];
   ingredientLines: string[];
-  ingredients: Ingredient[];
+  ingredients: IIngredient[];
   calories: number;
   totalWeight: number;
   totalTime: number;
   cuisineType: string[];
   mealType: string;
   dishType: string;
-  totalNutrients: NutrientMap;
-  totalDaily: NutrientMap;
+  totalNutrients: INutrientMap;
+  totalDaily: INutrientMap;
   //   more attributes here, but they're not needed for our purposes
 }

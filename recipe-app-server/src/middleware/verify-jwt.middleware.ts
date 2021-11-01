@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import config from "../config";
+import config from "@config/env";
 
 // verifies the JWT passed into a given route.
 export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {

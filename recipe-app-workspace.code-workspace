@@ -1,0 +1,11 @@
+{
+  "folders": [
+	{
+		"path": "recipe-app-client"
+	},
+	{
+		"path": "recipe-app-server"
+	}
+],
+  "settings": {}
+}

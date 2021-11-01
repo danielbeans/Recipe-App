@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import config from "../config";
+import config from "@config/env";
 
 export const connectDb = async () => {
   const uri = `mongodb+srv://${config.atlas.username}:${config.atlas.password}@${config.atlas.cluster}/${config.atlas.dbname}?retryWrites=true&w=majority`;

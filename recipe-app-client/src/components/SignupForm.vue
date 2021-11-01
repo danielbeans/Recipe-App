@@ -1,7 +1,7 @@
 <template>
   <div class="signup-form max-w-xl mx-auto text-left md:mt-5">
     <form
-      class="bg-white md:shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      class="bg-white md:shadow-md rounded px-8 pt-6 pb-5 mb-4 relative"
       @submit="signup"
     >
       <h3 class="text-xl mb-4 text-gray-600 text-center">Sign up</h3>
@@ -219,6 +219,14 @@
           >Already have an account? Login here</router-link
         >
       </div>
+      <Modal
+        class="mt-7 w-full text-center"
+        v-if="response.display"
+        :isNotLogin="true"
+        :type="response.type"
+        :text="response.message"
+        :key="NaN"
+      />
     </form>
   </div>
 </template>
@@ -226,11 +234,16 @@
 import Vue from "vue";
 import { AuthValidator } from "../helpers/validator";
 import ISignupForm from "../interfaces/signup.interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { AUTH_ROUTES } from "@shared/routes";
+import Modal from "@/components/Modal.vue";
+import { AlertType } from "../enum/alert.enum";
 
 export default Vue.extend({
+  components: { Modal },
   data() {
     return {
+      response: { message: "", type: AlertType.ERROR, display: false },
       signupForm: {
         name: "",
         email: "",
@@ -242,21 +255,27 @@ export default Vue.extend({
   },
   methods: {
     async signup(event: Event) {
-      try {
-        event.preventDefault();
-        if (this.validate.validated) {
-          event.preventDefault();
-          const res = await axios.post("http://localhost:3000/auth/signup", {
+      event.preventDefault();
+      if (this.validate.validated) {
+        try {
+          await axios.post(AUTH_ROUTES.BASE + AUTH_ROUTES.SIGNUP, {
             name: this.signupForm.name,
             email: this.signupForm.email,
             username: this.signupForm.username,
             password: this.signupForm.password,
           });
-          console.log(res);
-          return res;
+          this.response = {
+            message: "Account created successfully.",
+            type: AlertType.SUCCESS,
+            display: true,
+          };
+        } catch (err) {
+          this.response = {
+            message: (err as AxiosError).response?.data.error,
+            type: AlertType.ERROR,
+            display: true,
+          };
         }
-      } catch (err) {
-        return new Error("Unable to create user account");
       }
     },
   },

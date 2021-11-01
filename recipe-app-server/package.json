@@ -2,13 +2,25 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/recipe-app-server/src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc --watch",
-    "start": "nodemon dist/main.js"
+    "start": "nodemon dist/recipe-app-server/src/main.js"
   },
   "keywords": [],
+  "_moduleAliases": {
+    "@shared": "dist/shared",
+    "@controllers": "dist/recipe-app-server/src/controllers",
+    "@services": "dist/recipe-app-server/src/services",
+    "@routes": "dist/recipe-app-server/src/routes",
+    "@util": "dist/recipe-app-server/src/util",
+    "@enums": "dist/recipe-app-server/src/enums",
+    "@interfaces": "dist/recipe-app-server/src/interfaces",
+    "@models": "dist/recipe-app-server/src/models",
+    "@middleware": "dist/recipe-app-server/src/middleware",
+    "@config": "dist/recipe-app-server/src/config"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,6 +36,7 @@
     "express-session": "^1.17.2",
     "jdenticon": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "tslib": "^2.3.1",
     "uuid": "^8.3.2"
   },

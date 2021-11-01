@@ -1,9 +1,9 @@
-import { IUser } from "../interfaces/user.interface";
-import { UserModel } from "../model/User.model";
-import { validatePassword } from "../util/password.utility";
-import ILogin from "../interfaces/login.interface";
-import ISignup from "../interfaces/signup.interface";
-import config from "../config";
+import { IUser } from "@interfaces/user.interface";
+import { UserModel } from "@models/User.model";
+import { validatePassword } from "@util/password.utility";
+import { ILogin } from "@interfaces/login.interface";
+import { ISignup } from "@interfaces/signup.interface";
+import config from "@config/env";
 import jwt from "jsonwebtoken";
 
 export const AuthService = {

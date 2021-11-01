@@ -1,11 +1,23 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "baseUrl": "./src",
     "target": "ESNext",
     "outDir": "dist",
+    "paths": {
+      "@shared/*": ["../../shared/*"],
+      "@controllers/*": ["controllers/*"],
+      "@services/*": ["services/*"],
+      "@routes/*": ["routes/*"],
+      "@util/*": ["util/*"],
+      "@enums/*": ["enums/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@models/*": ["models/*"],
+      "@middleware/*": ["middleware/*"],
+      "@config/*": ["config/*"]
+    },
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "rootDir": "src",
     "resolveJsonModule": true,
     "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
@@ -16,6 +28,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../shared/**/*.ts"],
   "exclude": ["node_modules"]
 }

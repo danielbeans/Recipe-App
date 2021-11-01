@@ -113,6 +113,7 @@ import { IUser } from "../interfaces/user.interface";
 import ILoginForm from "../interfaces/login.interface";
 import axios from "axios";
 import { mapActions } from "vuex";
+import { AUTH_ROUTES } from "@shared/routes";
 
 export default Vue.extend({
   name: "LoginForm",
@@ -132,7 +133,7 @@ export default Vue.extend({
       try {
         if (this.validate.validated) {
           const res = await axios.post(
-            "http://localhost:3000/auth/login",
+            AUTH_ROUTES.BASE + AUTH_ROUTES.LOGIN,
             this.loginForm
           );
           this.setUser(res.data.user as IUser);

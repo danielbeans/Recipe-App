@@ -68,9 +68,21 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import RecipeCard from "./RecipeCard.vue";
+declare module "vue/types/vue" {
+  interface Vue {
+    pages: any[];
+    currentPageIndex: number;
+    ingredients: any[];
+    loading: boolean;
+    search: any;
+    getNextPageOfRecipes: () => any;
+    resetPageState: () => any;
+  }
+}
+import RecipeCard from "@/components/RecipeCard.vue";
 import axios from "axios";
 import { mapGetters } from "vuex";
+import { RECIPE_ROUTES } from "@shared/routes";
 export default Vue.extend({
   components: { RecipeCard },
   data() {
@@ -101,7 +113,7 @@ export default Vue.extend({
       this.loading = true;
       const data = (
         await axios.post(
-          "http://localhost:3000/recipes/search",
+          RECIPE_ROUTES.BASE + RECIPE_ROUTES.SEARCH,
           {
             token: this.getUser.token,
             ingredients: this.ingredients,
@@ -124,9 +136,10 @@ export default Vue.extend({
         this.loading = false;
         return;
       }
+      console.log();
       const data = (
         await axios.post(
-          "http://localhost:3000/recipes/search",
+          "/recipes/search",
           {
             token: this.getUser.token,
             ingredients: [],

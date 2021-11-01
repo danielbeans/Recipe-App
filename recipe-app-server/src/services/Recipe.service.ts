@@ -1,14 +1,15 @@
 import axios from "axios";
-import config from "../config";
-import { HTTPStatus } from "../enum/http-status.enum";
-import { RecipeRequest } from "../interfaces/recipe-request.interface";
-
+import config from "@config/env";
+import { HTTPStatus } from "@enums/http-status.enum";
+import { IRecipeRequest } from "@interfaces/recipe-request.interface";
+// import { RECIPE_ROUTE } from "@shared/routes";
+// console.log(RECIPE_ROUTE);
 export const RecipeService = {
   RECIPES_FETCH_ERR:
     "Unable to fetch recipes at this time, please try again at a later time",
   NO_RECIPES_FOUND_ERR: "No recipes found using the provided query",
   ENDPOINT: `https://api.edamam.com/api/recipes/v2?app_id=${config.recipes.app_id}&app_key=${config.recipes.app_key}&type=public`,
-  async getRecipes(req: RecipeRequest) {
+  async getRecipes(req: IRecipeRequest) {
     const ingredients = req.body.ingredients;
     const currentPage = req.session.currentPage;
     const url =
@@ -27,7 +28,7 @@ export const RecipeService = {
       recipes,
     };
   },
-  checkForNextPage(session: RecipeRequest["session"]) {
+  checkForNextPage(session: IRecipeRequest["session"]) {
     return session?.currentPage && session.currentPage._links?.next?.href;
   },
 };

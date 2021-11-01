@@ -1,7 +1,7 @@
-import { Grocery } from "./grocery.interfaces";
-import { GroceryOrder } from "./grocery-order.interface";
-import { Post } from "./post.interface";
-import { Recipe } from "./recipe.interface";
+import { IGrocery } from "@interfaces/grocery.interfaces";
+import { IGroceryOrder } from "@interfaces/grocery-order.interface";
+import { IPost } from "@interfaces/post.interface";
+import { IRecipe } from "@shared/interfaces/recipe.interface";
 
 export interface IUser {
   readonly _id: string;
@@ -11,8 +11,8 @@ export interface IUser {
   password: string;
   readonly avatar: string;
   token: string;
-  readonly favorites?: Recipe[];
-  readonly groceries?: Grocery[];
-  readonly orders?: GroceryOrder[];
-  readonly posts?: Post[];
+  readonly favorites?: IRecipe[];
+  readonly groceries?: IGrocery[];
+  readonly orders?: IGroceryOrder[];
+  readonly posts?: IPost[];
 }

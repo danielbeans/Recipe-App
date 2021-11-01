@@ -1,1 +1,1 @@
-export interface GroceryOrder {}
+export interface IGroceryOrder {}

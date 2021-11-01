@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="!name" class="mx-1 my-8 w-full md:w-1/3 xl:w-5/12">
+  <v-card :loading="!name" class="mx-1 my-8 w-full md:w-2/5 xl:w-5/12">
     <template slot="progress">
       <v-progress-linear
         color="primary"
@@ -46,6 +46,11 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+declare module "vue/types/vue" {
+  interface Vue {
+    id: string;
+  }
+}
 export default Vue.extend({
   props: {
     id: String,
