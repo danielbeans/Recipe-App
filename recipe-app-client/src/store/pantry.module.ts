@@ -1,6 +1,6 @@
 import IPantryItem from "@/interfaces/pantry-item.interface";
 import { GetterTree, MutationTree, ActionTree } from "vuex";
-import { uuid } from "uuidv4";
+import { v4 as uuidv4 } from "uuid";
 
 enum MutationTypes {
   ADD_PANTRY_ITEM = "ADD_PANTRY_ITEM",
@@ -13,7 +13,7 @@ class PantryState {
 
 const mutations = <MutationTree<PantryState>>{
   [MutationTypes.ADD_PANTRY_ITEM](state: PantryState, newItemName: string) {
-    state.pantry.push({ name: newItemName, id: uuid() });
+    state.pantry.push({ name: newItemName, id: uuidv4() });
   },
   [MutationTypes.REMOVE_PANTRY_ITEM](state: PantryState, id: string) {
     const indexToRemove = state.pantry.findIndex((item) => item.id === id);

@@ -31,11 +31,17 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "Login",
     component: Login,
+    meta: {
+      isGuestRoute: true,
+    },
   },
   {
     path: "/signup",
     name: "Signup",
     component: Signup,
+    meta: {
+      isGuestRoute: true,
+    },
   },
 ];
 
@@ -46,13 +52,16 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+  const isLoggedIn = store.getters["AuthModule/isLoggedIn"];
+  if (to.matched.some((record) => record.meta.isGuestRoute)) {
+    if (isLoggedIn) return next({ path: "/recipes" });
+    next();
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (store.getters["AuthModule/getUser"]?.jwt?.exp < Date.now() / 1000) {
       store.dispatch("AuthModule/logoutUser");
       next({ path: "/login", query: { redirect: to.fullPath } });
     }
-    const isAuth = store.getters["AuthModule/isLoggedIn"];
-    if (!isAuth) {
+    if (!isLoggedIn) {
       next({ path: "/login", query: { redirect: to.fullPath } });
     }
     next();

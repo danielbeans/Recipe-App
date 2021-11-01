@@ -3,6 +3,7 @@
     <v-combobox
       v-model="ingredients"
       :search-input.sync="search"
+      :items="getPantryItemNames"
       hide-selected
       multiple
       label="Add ingredients for search"
@@ -60,6 +61,7 @@
       color="primary"
       v-else-if="loading"
     ></v-progress-circular>
+    <h5 v-else-if="error" class="mt-5 text-gray-500 text-lg">{{ error }}</h5>
     <h5 v-else class="mt-5 text-gray-500 text-lg">
       No recipes to display, try searching for recipes using the text field
       above.
@@ -68,7 +70,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { mapGetters } from "vuex";
 import RecipeCard from "@/components/RecipeCard.vue";
 import { IRecipePage } from "@shared/interfaces/recipe-page.interface";
@@ -82,12 +84,14 @@ export default Vue.extend({
       ingredients: [],
       loading: false,
       search: null,
+      error: "",
     };
   },
   computed: {
     ...mapGetters({
       getUser: "AuthModule/getUser",
       isLoggedIn: "AuthModule/isLoggedIn",
+      getPantry: "PantryModule/getPantry",
     }),
     showPrevBtn(): boolean {
       return this.pages.length > 0 && this.currentPageIndex !== 0;
@@ -97,27 +101,36 @@ export default Vue.extend({
         this.pages.length > 0 && this.pages[this.currentPageIndex].hasNextPage
       );
     },
+    getPantryItemNames(): string[] {
+      return this.getPantry.map(({ name }) => name);
+    },
   },
   methods: {
     async getRecipes(): Promise<void> {
       this.loading = true;
-      const data: IRecipePage = (
-        await axios.post(
-          RECIPE_ROUTES.BASE + RECIPE_ROUTES.SEARCH,
-          {
-            token: this.getUser.jwt.token,
-            ingredients: this.ingredients,
-          },
-          { withCredentials: true }
-        )
-      ).data;
-      const ingredientMatch = this.pages.find(
-        (page) =>
-          JSON.stringify(page.ingredients) === JSON.stringify(this.ingredients)
-      );
-      if (!ingredientMatch) this.resetPageState();
-      data.recipes.forEach((recipe) => (recipe["favorited"] = false));
-      this.pages.push(data);
+      try {
+        const data: IRecipePage = (
+          await axios.post(
+            RECIPE_ROUTES.BASE + RECIPE_ROUTES.SEARCH,
+            {
+              token: this.getUser.jwt.token,
+              ingredients: this.ingredients,
+            },
+            { withCredentials: true }
+          )
+        ).data;
+        const ingredientMatch = this.pages.find(
+          (page) =>
+            JSON.stringify(page.ingredients) ===
+            JSON.stringify(this.ingredients)
+        );
+        if (!ingredientMatch) this.resetPageState();
+        data.recipes.forEach((recipe) => (recipe["favorited"] = false));
+        this.pages.push(data);
+        this.error = "";
+      } catch (err) {
+        this.error = (err as AxiosError).response?.data.error;
+      }
       this.loading = false;
     },
     async getNextPageOfRecipes(): Promise<void | IRecipePage> {
