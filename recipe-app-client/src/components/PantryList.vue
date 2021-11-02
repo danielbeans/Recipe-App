@@ -91,7 +91,9 @@ export default Vue.extend({
       this.selected = "";
     },
     add(): void {
-      this.addPantryItem(this.itemToAdd);
+      if (this.itemToAdd.length > 0) {
+        this.addPantryItem(this.itemToAdd);
+      }
       this.startAdding = false;
       this.itemToAdd = "";
     },
