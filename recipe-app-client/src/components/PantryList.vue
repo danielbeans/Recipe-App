@@ -45,11 +45,25 @@
         right
         bottom
         color="primary"
-        @click="startAdding = true"
+        @click="(startAdding = true), (modalState.display = false)"
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-card>
+    <Modal
+      v-if="modalState.display"
+      :text="modalState.text"
+      :type="modalState.type"
+      :isNotLogin="true"
+      class="
+        absolute
+        bottom-2
+        transform
+        left-1/2
+        -translate-x-1/2 -translate-y-1/2
+        w-2/5
+      "
+    />
   </v-container>
 </template>
 
@@ -58,15 +72,24 @@ import IPantryItem from "@/interfaces/pantry-item.interface";
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import PantryListItem from "./PantryListItem.vue";
+import Modal from "../components//Modal.vue";
+import { AlertType } from "../enum/alert.enum";
 export default Vue.extend({
   components: {
     PantryListItem,
+    Modal,
   },
   data() {
     return {
+      AlertType,
       startAdding: false,
       selected: "",
       itemToAdd: "",
+      modalState: {
+        type: AlertType.SUCCESS,
+        text: "",
+        display: false,
+      },
     };
   },
   computed: {
@@ -85,7 +108,13 @@ export default Vue.extend({
       editPantryItem: "PantryModule/editPantryItem",
     }),
     remove(id: string): void {
+      const itemName = this.getPantry.find((item) => item.id === id).name;
       this.removePantryItem(id);
+      this.setModalState(
+        AlertType.SUCCESS,
+        `You have successfully removed ${itemName} from your pantry`,
+        true
+      );
     },
     edit(): void {
       this.selected = "";
@@ -93,6 +122,11 @@ export default Vue.extend({
     add(): void {
       if (this.itemToAdd.length > 0) {
         this.addPantryItem(this.itemToAdd);
+        this.setModalState(
+          AlertType.SUCCESS,
+          "You have successfully added a new item to your pantry",
+          true
+        );
       }
       this.startAdding = false;
       this.itemToAdd = "";
@@ -102,6 +136,9 @@ export default Vue.extend({
     },
     setSelected(id: string): void {
       this.selected = id;
+    },
+    setModalState(type: AlertType, text: string, display: boolean) {
+      this.modalState = { type, text, display };
     },
   },
 });
