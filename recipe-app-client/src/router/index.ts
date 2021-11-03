@@ -6,6 +6,7 @@ import Home from "../views/Home.vue";
 import store from "../store/index";
 import Recipes from "../views/Recipes.vue";
 import Pantry from "../views/Pantry.vue";
+import Settings from "../views/Settings.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -13,6 +14,14 @@ const routes: Array<RouteConfig> = [
     path: "/pantry",
     name: "Pantry",
     component: Pantry,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
     meta: {
       requiresAuth: true,
     },
