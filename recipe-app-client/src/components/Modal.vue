@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="isNotLogin || getModalDisplay">
     <v-alert
-      v-if="isNotLogin || getModalDisplay"
+      v-model="alert"
       elevation="2"
       colored-border
       border="left"
       class="p-5"
-      dismissible
+      :dismissible="isNotLogin"
       :type="type"
       :value="alert"
     >
@@ -31,9 +31,14 @@ export default Vue.extend({
       alert: true,
     };
   },
+  created() {
+    if (!this.isNotLogin) setTimeout(() => this.setModalDisplay(false), 3500);
+  },
   computed: {
     ...mapGetters({ getModalDisplay: "AuthModule/getModalDisplay" }),
   },
-  methods: { ...mapActions({ setModalDisplay: "AuthModule/setModalDisplay" }) },
+  methods: {
+    ...mapActions({ setModalDisplay: "AuthModule/setModalDisplay" }),
+  },
 });
 </script>

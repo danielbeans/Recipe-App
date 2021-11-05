@@ -1,5 +1,3 @@
-import config from "@config/env";
-import { Request, Response } from "express";
 import { IPantryItem } from "@shared/interfaces/pantry.interface";
 import { decodeJWT } from "@util/token.utility";
 import { UserModel } from "@models/User.model";

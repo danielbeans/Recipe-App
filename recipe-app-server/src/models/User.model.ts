@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 import jdenticon from "jdenticon";
 import { v4 as uuidv4 } from "uuid";
 import { IUser } from "@interfaces/user.interface";
-import { hashPassword } from "../util/password.utility";
+import { hashPassword } from "@util/password.utility";
 // setup how a User document will look like in the users collection
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
