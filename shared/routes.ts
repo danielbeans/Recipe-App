@@ -11,3 +11,9 @@ export const RECIPE_ROUTES = {
   FAVORITE: "/favorite",
   FAVORITES: "/favorites",
 };
+
+export const PANTRY_ROUTES = {
+  BASE: "/pantry",
+  UPDATE: "/update",
+  GET: "/get",
+};

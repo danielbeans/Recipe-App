@@ -12,6 +12,7 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   avatar: { type: String, required: false },
   favorite_recipes: [Object],
+  pantry: [Object],
 });
 
 // before saving our document, we want to hash the inputted password

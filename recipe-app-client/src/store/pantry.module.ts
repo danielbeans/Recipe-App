@@ -1,4 +1,4 @@
-import IPantryItem from "@/interfaces/pantry-item.interface";
+import { IPantryItem } from "@shared/interfaces/pantry.interface";
 import { GetterTree, MutationTree, ActionTree } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 
