@@ -1,20 +1,33 @@
-import { IUser } from "../interfaces/user.interface";
-import { UserModel } from "../model/User.model";
-import { validatePassword } from "../util/password.utility";
-import ILogin from "../interfaces/login.interface";
-import ISignup from "../interfaces/signup.interface";
-import config from "../config";
+import { IUser } from "@interfaces/user.interface";
+import { UserModel } from "@models/User.model";
+import { validatePassword } from "@util/password.utility";
+import { ILogin } from "@interfaces/login.interface";
+import { ISignup } from "@interfaces/signup.interface";
 import jwt from "jsonwebtoken";
+import { decodeJWT } from "../util/token.utility";
+import config from "@config/env";
 
 export const AuthService = {
   EXPIRATION: "2h",
   async login({ username, password }: ILogin) {
-    const user: IUser = await UserModel.findOne({ username });
+    const user: IUser = await UserModel.findOne({ username }); // find user with matching username in db
+    // if user exists and passwords match
     if (user && (await validatePassword(password, user.password))) {
-      const token = this.signToken(user, username);
-      user.token = token;
-      delete user.password;
-      return user;
+      const token = this.signToken(user, username); // sign new token
+      const { exp } = decodeJWT(token); // get expiration time for token
+      user.password = undefined; // remove password hash from user object before sending to client
+      const { _id, name, email, avatar } = user;
+      return {
+        _id,
+        name,
+        username,
+        email,
+        avatar,
+        jwt: {
+          token,
+          exp,
+        },
+      };
     }
     throw new Error("Username and/or password combination incorrect");
   },
@@ -22,24 +35,34 @@ export const AuthService = {
     const hasDuplicate = await this.checkDuplicateEmailOrUsername(
       email,
       username
-    );
-    if (hasDuplicate) throw hasDuplicate;
+    ); // check if user with existing username or email exists
+    if (hasDuplicate) throw hasDuplicate; // if already existing user with username/email exists, throw error
     email = email.toLowerCase();
-    console.log(email);
     const user: IUser = await UserModel.create({
       name,
       email,
       username,
       password,
-    });
-    const token = this.signToken(user, email);
-    user.token = token;
-    delete user.password;
-    return user;
+    }); // create new user with given credentials
+    const token = this.signToken(user, email); // sign new token for user
+    const { exp } = decodeJWT(token) as JwtPayload; // get expiration time for token
+    user.jwt = { token, exp }; // set token on user object for future API requests
+    user.password = undefined; // remove password hash from user object before sending to client
+    const { _id, avatar } = user;
+    return {
+      _id,
+      name,
+      username,
+      email,
+      avatar,
+      jwt: {
+        token,
+        exp,
+      },
+    };
   },
-
+  // check if user with email or username already exists in db
   async checkDuplicateEmailOrUsername(email: string, username: string) {
-    // check if user with email or username already exists in db
     const exists = await UserModel.findOne({ $or: [{ username }, { email }] });
     if (exists && exists.username === username && exists.email === email)
       return new Error("User with username and email already exists.");
@@ -49,7 +72,7 @@ export const AuthService = {
       return new Error("User with username already exists.");
     return false;
   },
-
+  // sign new JWT
   signToken(user: IUser, username: string) {
     return jwt.sign({ user_id: user._id, username }, config.auth.secret, {
       expiresIn: this.EXPIRATION,

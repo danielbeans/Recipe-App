@@ -4,10 +4,11 @@ import { GetterTree, MutationTree, ActionTree } from "vuex";
 enum MutationTypes {
   SET_USER = "SET_USER",
   LOGOUT_USER = "LOGOUT_USER",
+  SET_MODAL_DISPLAY = "SET_MODAL_DISPLAY",
 }
-
 class AuthState {
   user: IUser | null = null;
+  modalDisplay: boolean;
 }
 
 const mutations = <MutationTree<AuthState>>{
@@ -16,6 +17,9 @@ const mutations = <MutationTree<AuthState>>{
   },
   [MutationTypes.LOGOUT_USER](state: AuthState) {
     state.user = null;
+  },
+  [MutationTypes.SET_MODAL_DISPLAY](state: AuthState, value: boolean) {
+    state.modalDisplay = value;
   },
 };
 
@@ -27,11 +31,18 @@ const actions = <ActionTree<AuthState, any>>{
     localStorage.removeItem("user");
     context.commit(MutationTypes.LOGOUT_USER);
   },
+  setModalDisplay(context, value: boolean) {
+    localStorage.removeItem("modalDisplayed");
+    context.commit(MutationTypes.SET_MODAL_DISPLAY, value);
+  },
 };
 
 const getters = <GetterTree<AuthState, any>>{
+  getModalDisplay(state: AuthState) {
+    return state.modalDisplay;
+  },
   isLoggedIn(state: AuthState) {
-    return !!state.user?.token;
+    return !!state.user?.jwt.token;
   },
   getUser(state: AuthState) {
     return state.user;

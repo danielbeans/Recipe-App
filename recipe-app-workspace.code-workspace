@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "recipe-app-client"
+    },
+    {
+      "path": "recipe-app-server"
+    },
+    {
+      "path": "shared"
+    }
+  ],
+  "settings": {}
+}

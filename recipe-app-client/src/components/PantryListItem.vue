@@ -8,26 +8,26 @@
       icon
       color="secondary"
       @click="setSelected"
-      v-show="selected !== item + index"
+      v-show="selected !== id"
     >
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
-    <v-list-item-content v-show="selected !== item + index" class="mx-3">{{
-      item
+    <v-list-item-content v-show="selected !== id" class="mx-3">{{
+      name
     }}</v-list-item-content>
     <v-btn
       class="mx-1"
       icon
       color="secondary"
       @click="edit"
-      v-show="selected === item + index"
+      v-show="selected === id"
     >
       <v-icon>mdi-check</v-icon>
     </v-btn>
     <v-text-field
       @input="(newItem) => setItem(newItem)"
-      v-show="selected === item + index"
-      :placeholder="item"
+      v-show="selected === id"
+      :placeholder="name"
       class="mx-3"
       @keydown.enter="edit"
       autofocus
@@ -40,24 +40,24 @@
 import Vue from "vue";
 export default Vue.extend({
   props: {
-    item: String,
-    index: Number,
+    id: String,
+    name: String,
     selected: String,
     removeParent: Function,
     editParent: Function,
   },
   methods: {
-    edit() {
-      this.editParent(this.index);
+    edit(): void {
+      this.editParent(this.id);
     },
-    remove() {
-      this.removeParent(this.index);
+    remove(): void {
+      this.removeParent(this.id);
     },
-    setSelected() {
-      this.$emit("setSelected", this.item + this.index);
+    setSelected(): void {
+      this.$emit("setSelected", this.id);
     },
-    setItem(newItem: string) {
-      this.$emit("setItem", newItem, this.index);
+    setItem(newItemName: string): void {
+      this.$emit("setItem", { id: this.id, name: newItemName });
     },
   },
 });

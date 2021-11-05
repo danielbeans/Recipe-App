@@ -1,1 +1,1 @@
-export interface Post {}
+export interface IPost {}

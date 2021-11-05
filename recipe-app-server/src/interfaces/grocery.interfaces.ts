@@ -1,1 +1,1 @@
-export interface Grocery {}
+export interface IGrocery {}

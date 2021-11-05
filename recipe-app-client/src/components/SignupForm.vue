@@ -1,7 +1,22 @@
 <template>
-  <div class="signup-form max-w-xl mx-auto text-left md:mt-5">
+  <div
+    class="
+      signup-form
+      mx-auto
+      w-full
+      text-left
+      md:mt-5
+      lg:max-w-xl
+      md:absolute
+      md:top-1/2
+      md:left-1/2
+      md:transform
+      md:-translate-x-1/2
+      md:-translate-y-1/2
+    "
+  >
     <form
-      class="bg-white md:shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      class="bg-white md:shadow-md rounded px-8 pt-6 pb-5 mb-4 relative"
       @submit="signup"
     >
       <h3 class="text-xl mb-4 text-gray-600 text-center">Sign up</h3>
@@ -219,18 +234,47 @@
           >Already have an account? Login here</router-link
         >
       </div>
+      <Modal
+        class="mt-7 w-full text-center"
+        v-if="response.display"
+        :isNotLogin="true"
+        :type="response.type"
+        :text="response.message"
+        :key="NaN"
+      />
     </form>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { AuthValidator } from "../helpers/validator";
-import ISignupForm from "../interfaces/signup.interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { mapActions } from "vuex";
+import Modal from "@/components/Modal.vue";
+import {
+  AuthValidator,
+  AuthValidation,
+  SignupValidation,
+} from "@/helpers/validator";
+import ISignupForm from "@/interfaces/signup.interface";
+import { AUTH_ROUTES } from "@shared/routes";
+import { AlertType } from "@/enum/alert.enum";
+import { IUser } from "@/interfaces/user.interface";
+
+interface ISignupResponse {
+  message: string;
+  type: AlertType;
+  display: boolean;
+}
 
 export default Vue.extend({
+  components: { Modal },
   data() {
     return {
+      response: {
+        message: "",
+        type: AlertType.ERROR,
+        display: false,
+      } as ISignupResponse,
       signupForm: {
         name: "",
         email: "",
@@ -241,31 +285,38 @@ export default Vue.extend({
     };
   },
   methods: {
-    async signup(event: Event) {
-      try {
-        event.preventDefault();
-        if (this.validate.validated) {
-          event.preventDefault();
-          const res = await axios.post("http://localhost:3000/auth/signup", {
+    ...mapActions({
+      setUser: "AuthModule/setUser",
+      setModalDisplay: "AuthModule/setModalDisplay",
+    }),
+    async signup(event: Event): Promise<void> {
+      event.preventDefault();
+      if (this.validate.validated) {
+        try {
+          const res = await axios.post(AUTH_ROUTES.BASE + AUTH_ROUTES.SIGNUP, {
             name: this.signupForm.name,
             email: this.signupForm.email,
             username: this.signupForm.username,
             password: this.signupForm.password,
           });
-          console.log(res);
-          return res;
+          this.setUser(res.data.user as IUser);
+          this.setModalDisplay(true);
+          this.$router.push("/recipes");
+        } catch (err) {
+          this.response = {
+            message: (err as AxiosError).response?.data.error,
+            type: AlertType.ERROR,
+            display: true,
+          };
         }
-      } catch (err) {
-        return new Error("Unable to create user account");
       }
     },
   },
-
   computed: {
-    validate(): any {
+    validate(): AuthValidation | SignupValidation {
       return AuthValidator.validate(this.signupForm);
     },
-    userHasTyped(): any {
+    userHasTyped(): boolean {
       return (
         this.signupForm.username.length >= 1 ||
         this.signupForm.password.length >= 1 ||

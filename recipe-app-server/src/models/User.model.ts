@@ -2,9 +2,8 @@
 import mongoose, { Schema } from "mongoose";
 import jdenticon from "jdenticon";
 import { v4 as uuidv4 } from "uuid";
-import { IUser } from "../interfaces/user.interface";
+import { IUser } from "@interfaces/user.interface";
 import { hashPassword } from "../util/password.utility";
-
 // setup how a User document will look like in the users collection
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
@@ -12,7 +11,8 @@ const UserSchema = new Schema<IUser>({
   username: { type: String, required: true },
   password: { type: String, required: true },
   avatar: { type: String, required: false },
-  token: { type: String },
+  favorite_recipes: [Object],
+  pantry: [Object],
 });
 
 // before saving our document, we want to hash the inputted password
@@ -24,6 +24,7 @@ UserSchema.pre("save", async function () {
       this.avatar = jdenticon.toSvg(uuidv4(), 200, {
         hues: [],
       });
+      this.favorite_recipe = [];
     }
   } catch (err) {
     console.error(err);

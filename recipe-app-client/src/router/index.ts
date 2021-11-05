@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
-import Home from "../views/Home.vue";
 import store from "../store/index";
 import Recipes from "../views/Recipes.vue";
 import Pantry from "../views/Pantry.vue";
@@ -38,11 +37,17 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "Login",
     component: Login,
+    meta: {
+      isGuestRoute: true,
+    },
   },
   {
     path: "/signup",
     name: "Signup",
     component: Signup,
+    meta: {
+      isGuestRoute: true,
+    },
   },
 ];
 
@@ -52,10 +57,17 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    const isAuth = store.getters["AuthModule/isLoggedIn"];
-    if (!isAuth) {
+router.beforeEach(async (to, from, next) => {
+  const isLoggedIn = store.getters["AuthModule/isLoggedIn"];
+  if (to.matched.some((record) => record.meta.isGuestRoute)) {
+    if (isLoggedIn) return next({ path: "/recipes" });
+    next();
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters["AuthModule/getUser"]?.jwt?.exp < Date.now() / 1000) {
+      store.dispatch("AuthModule/logoutUser");
+      next({ path: "/login", query: { redirect: to.fullPath } });
+    }
+    if (!isLoggedIn) {
       next({ path: "/login", query: { redirect: to.fullPath } });
     }
     next();
