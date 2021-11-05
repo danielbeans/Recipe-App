@@ -5,7 +5,3 @@ export interface IPantryItem {
   measure?: string;
   weight?: number;
 }
-
-export interface IPantry {
-  pantry: IPantryItem[];
-}

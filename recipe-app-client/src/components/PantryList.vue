@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { IPantryItem } from "@shared/interfaces/pantry.interface";
+import { IPantryItem } from "@shared/interfaces/pantry-item.interface";
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import PantryListItem from "./PantryListItem.vue";
