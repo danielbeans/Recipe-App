@@ -1,12 +1,18 @@
 <template>
-  <v-alert
-    v-if="isNotLogin || getModalDisplay"
-    class="p-5"
-    :type="type"
-    :value="alert"
-  >
-    {{ text }}
-  </v-alert>
+  <div>
+    <v-alert
+      v-if="isNotLogin || getModalDisplay"
+      elevation="2"
+      colored-border
+      border="left"
+      class="p-5"
+      dismissible
+      :type="type"
+      :value="alert"
+    >
+      {{ text }}
+    </v-alert>
+  </div>
 </template>
 
 <script lang="ts">
@@ -16,8 +22,8 @@ import { mapActions, mapGetters } from "vuex";
 export default Vue.extend({
   name: "Modal",
   props: {
-    type: String,
-    text: String,
+    type: { type: String, default: "" },
+    text: { type: String, default: "" },
     isNotLogin: Boolean,
   },
   data() {
@@ -29,11 +35,5 @@ export default Vue.extend({
     ...mapGetters({ getModalDisplay: "AuthModule/getModalDisplay" }),
   },
   methods: { ...mapActions({ setModalDisplay: "AuthModule/setModalDisplay" }) },
-  created(): void {
-    setTimeout(() => {
-      this.alert = false;
-      this.setModalDisplay(false);
-    }, 2000);
-  },
 });
 </script>
