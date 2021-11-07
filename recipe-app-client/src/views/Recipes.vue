@@ -12,6 +12,7 @@
         w-2/5
       "
       text="You have successfully logged in."
+      :isNotLogin="false"
     />
   </section>
 </template>

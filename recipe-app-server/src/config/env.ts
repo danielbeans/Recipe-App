@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
+
+enum NodeEnvTypes {
+  PRODUCTION = "production",
+  DEVELOPMENT = "development",
+}
+
 export default {
   atlas: {
     password: process.env.ATLAS_PASSWORD,
@@ -19,5 +25,8 @@ export default {
   },
   session: {
     secret: process.env.SESSION_SECRET,
+  },
+  node_env: {
+    isDevelopment: process.env.NODE_ENV === NodeEnvTypes.DEVELOPMENT,
   },
 };

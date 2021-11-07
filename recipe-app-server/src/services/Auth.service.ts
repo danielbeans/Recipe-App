@@ -8,7 +8,7 @@ import { decodeJWT } from "../util/token.utility";
 import config from "@config/env";
 
 export const AuthService = {
-  EXPIRATION: "2h",
+  EXPIRATION: config.node_env.isDevelopment ? "365d" : "2h",
   async login({ username, password }: ILogin) {
     const user: IUser = await UserModel.findOne({ username }); // find user with matching username in db
     // if user exists and passwords match
