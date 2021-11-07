@@ -19,6 +19,9 @@ export const RECIPE_ROUTES = {
 
 export const PANTRY_ROUTES = {
   BASE: "/pantry",
-  UPDATE: "/update",
+  ADD: "/add",
+  EDIT: "/edit",
+  REMOVE: "/remove",
   GET: "/get",
+  CLEAR: "/clear",
 };

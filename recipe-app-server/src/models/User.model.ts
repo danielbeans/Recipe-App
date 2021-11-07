@@ -4,6 +4,7 @@ import jdenticon from "jdenticon";
 import { v4 as uuidv4 } from "uuid";
 import { IUser } from "@interfaces/user.interface";
 import { hashPassword } from "@util/password.utility";
+import { PantryItemSchema } from "./PantryItem.model";
 // setup how a User document will look like in the users collection
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
@@ -12,7 +13,7 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   avatar: { type: String, required: false },
   favorite_recipes: [Object],
-  pantry: [Object],
+  pantry: [PantryItemSchema],
 });
 
 // before saving our document, we want to hash the inputted password
@@ -25,6 +26,7 @@ UserSchema.pre("save", async function () {
         hues: [],
       });
       this.favorite_recipe = [];
+      this.pantry = [];
     }
   } catch (err) {
     console.error(err);
