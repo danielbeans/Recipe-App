@@ -4,6 +4,11 @@ export const AUTH_ROUTES = {
   SIGNUP: "/signup",
 };
 
+export const SETTINGS_ROUTES = {
+  BASE: "/settings",
+  DELETE: "/delete",
+};
+
 export const RECIPE_ROUTES = {
   BASE: "/recipes",
   SEARCH: "/search",

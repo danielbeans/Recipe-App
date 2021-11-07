@@ -28,7 +28,7 @@ const actions = <ActionTree<AuthState, any>>{
     context.commit(MutationTypes.SET_USER, user);
   },
   logoutUser(context) {
-    localStorage.removeItem("user");
+    localStorage.clear();
     context.commit(MutationTypes.LOGOUT_USER);
   },
   setModalDisplay(context, value: boolean) {
