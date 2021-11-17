@@ -7,6 +7,7 @@ export const AUTH_ROUTES = {
 export const SETTINGS_ROUTES = {
   BASE: "/settings",
   DELETE: "/delete",
+  UPDATE_PASSWORD: "/update/password",
 };
 
 export const RECIPE_ROUTES = {
