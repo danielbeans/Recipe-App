@@ -30,4 +30,49 @@ export const SettingsService = {
     }
     throw new Error("Invalid current password.");
   },
+  async updateName({
+    user_id,
+    newName,
+  }: {
+    user_id: JwtPayload["user_id"];
+    newName: string;
+  }) {
+    const userToUpdate = await UserModel.findById(user_id);
+    if (userToUpdate) {
+      userToUpdate.name = newName;
+      userToUpdate.save();
+      return true;
+    }
+    throw new Error("Could not update name");
+  },
+  async updateUsername({
+    user_id,
+    newUsername,
+  }: {
+    user_id: JwtPayload["user_id"];
+    newUsername: string;
+  }) {
+    const userToUpdate = await UserModel.findById(user_id);
+    if (userToUpdate) {
+      userToUpdate.username = newUsername;
+      userToUpdate.save();
+      return true;
+    }
+    throw new Error("Could not update username");
+  },
+  async updateEmail({
+    user_id,
+    newEmail,
+  }: {
+    user_id: JwtPayload["user_id"];
+    newEmail: string;
+  }) {
+    const userToUpdate = await UserModel.findById(user_id);
+    if (userToUpdate) {
+      userToUpdate.email = newEmail;
+      userToUpdate.save();
+      return true;
+    }
+    throw new Error("Could not update email");
+  },
 };

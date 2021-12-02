@@ -6,9 +6,9 @@ import { IPantryItem } from "@shared/interfaces/pantry-item.interface";
 
 export interface IUser {
   readonly _id: string;
-  readonly name: string;
-  readonly email: string;
-  readonly username: string;
+  name: string;
+  email: string;
+  username: string;
   password: string;
   avatar: string;
   jwt?: { token: string; exp: number };

@@ -15,5 +15,20 @@ export function SettingsRoutes() {
     verifyJwt,
     SettingsController.updatePassword
   );
+  router.post(
+    SETTINGS_ROUTES.UPDATE_NAME,
+    verifyJwt,
+    SettingsController.updateName
+  );
+  router.post(
+    SETTINGS_ROUTES.UPDATE_USERNAME,
+    verifyJwt,
+    SettingsController.updateUsername
+  );
+  router.post(
+    SETTINGS_ROUTES.UPDATE_EMAIL,
+    verifyJwt,
+    SettingsController.updateEmail
+  );
   return router;
 }
