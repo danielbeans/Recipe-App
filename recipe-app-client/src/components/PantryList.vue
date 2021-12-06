@@ -97,7 +97,7 @@ export default Vue.extend({
       getUser: "AuthModule/getUser",
       getPantry: "PantryModule/getPantry",
     }),
-    pantry(): void {
+    pantry(): IPantryItem[] {
       return this.getPantry;
     },
   },
