@@ -1,17 +1,12 @@
 <template>
-  <v-container class="pa-6 ml-0 mt-20">
+  <v-container class="pa-6 ml-0 mt-5">
     <div class="rightbox">
       <div class="profile px-8 settings">
         <h1 class="text-h3 font-weight-bold">Profile Settings</h1>
-<<<<<<< Updated upstream
-
-        <h2 class="text-h6 mt-5 font-weight-bold">Name</h2>
-        <v-text-field v-model="newName" :placeholder="getName()" class="w-1/4">
-=======
         <h2 class="text-h6 mt-5 font-weight-bold">Change Name</h2>
         <v-text-field v-model="newName" placeholder="New Name" class="w-1/4">
->>>>>>> Stashed changes
         </v-text-field>
+        <p class="text-red-500">{{ nameError }}</p>
         <v-btn
           @click="updateName"
           depressed
@@ -20,18 +15,14 @@
           >Update Name</v-btn
         >
         <v-divider></v-divider>
-
         <h2 class="text-h6 mt-5 font-weight-bold">Change Username</h2>
         <v-text-field
           v-model="newUsername"
-<<<<<<< Updated upstream
-          :placeholder="getUsername()"
-=======
-          placeholder="New Username text-white"
->>>>>>> Stashed changes
+          placeholder="New Username"
           class="w-1/4"
         >
         </v-text-field>
+        <p class="text-red-500">{{ usernameError }}</p>
         <v-btn
           @click="updateUsername"
           depressed
@@ -40,19 +31,10 @@
           >Update Username</v-btn
         >
         <v-divider></v-divider>
-
-<<<<<<< Updated upstream
-        <h2 class="text-h6 mt-5 font-weight-bold">Email</h2>
-        <v-text-field
-          v-model="newEmail"
-          :placeholder="getEmail()"
-          class="w-1/3"
-        >
-=======
         <h2 class="text-h6 mt-5 font-weight-bold">Change Email</h2>
         <v-text-field v-model="newEmail" placeholder="New Email" class="w-1/4">
->>>>>>> Stashed changes
         </v-text-field>
+        <p class="text-red-500">{{ emailError }}</p>
         <v-btn
           @click="updateEmail"
           depressed
@@ -61,20 +43,26 @@
           >Update Email</v-btn
         >
         <v-divider></v-divider>
-
         <h2 class="text-h6 mt-5 font-weight-bold">Change Password</h2>
         <v-text-field
+          type="password"
+          v-model="currentPassword"
+          placeholder="Current Password"
+          class="w-1/3"
+        />
+        <v-text-field
+          type="password"
           v-model="newPassword"
           placeholder="New Password"
           class="w-1/3"
-        >
-        </v-text-field>
+        />
         <v-text-field
+          type="password"
           v-model="confirmNewPassword"
           placeholder="Confirm New Password"
           class="w-1/3"
-        >
-        </v-text-field>
+        />
+        <p class="text-red-500">{{ passwordError }}</p>
         <v-btn
           @click="updatePassword"
           depressed
@@ -82,19 +70,7 @@
           class="block mb-5 text-white"
           >Update Password</v-btn
         >
-
         <v-divider class="block mb-5"></v-divider>
-
-        <input type="radio" id="lightMode" value="light" v-model="display" />
-        <label for="lightMode">Light Mode</label>
-        <br />
-        <input type="radio" id="darkMode" value="dark" v-model="display" />
-        <label for="darkMode">Dark Mode</label>
-        <br />
-        <div class="block mb-5"></div>
-
-        <v-divider class="block mb-5"></v-divider>
-
         <div>
           <v-dialog v-model="openDeleteAccount" width="500">
             <template v-slot:activator="{ on, attrs }">
@@ -133,9 +109,10 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { mapGetters } from "vuex";
-import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
+import axios, { AxiosError } from "axios";
 import { SETTINGS_ROUTES } from "@shared/routes";
+import { AlertType } from "../enum/alert.enum";
 export default Vue.extend({
   name: "SettingsOptions",
   data() {
@@ -144,90 +121,97 @@ export default Vue.extend({
       newName: "",
       newEmail: "",
       newUsername: "",
+      currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
-      display: "light",
       nameError: "",
+      usernameError: "",
+      passwordError: "",
+      emailError: "",
     };
   },
   methods: {
-    getName() {
-      return this.getUser.name;
-    },
-    getUsername() {
-      return this.getUser.username;
-    },
-    getEmail() {
-      return this.getUser.email;
-    },
+    ...mapActions({
+      logoutUser: "AuthModule/logoutUser",
+      setUsername: "AuthModule/setUsername",
+      setEmail: "AuthModule/setEmail",
+      setName: "AuthModule/setName",
+    }),
     async updateName() {
-      const res = await axios.post(
-        SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_NAME,
-        {
+      try {
+        await axios.post(SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_NAME, {
           token: this.getUser.jwt.token,
           newName: this.newName,
-        }
-      );
-      const data = res.data;
-      if (data.error) {
-        this.nameError = data.error;
-        console.log(this.nameError);
-        return;
+        });
+        this.setName(this.newName);
+        this.newName = "";
+        this.nameError = "";
+      } catch (err) {
+        if (err !== undefined && axios.isAxiosError(err))
+          this.nameError = `Unable to update your name at this time, please try again later.`;
       }
-      console.log("Name Updated to " + this.newName);
     },
     async updateEmail() {
-      const res = await axios.post(
-        SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_EMAIL,
-        {
+      try {
+        await axios.post(SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_EMAIL, {
           token: this.getUser.jwt.token,
-          newEmaile: this.newEmail,
-        }
-      );
-      const data = res.data;
-      if (data.error) {
-        this.nameError = data.error;
-        console.log(this.nameError);
-        return;
+          newEmail: this.newEmail,
+        });
+        this.setEmail(this.newEmail);
+        this.newEmail = "";
+        this.emailError = "";
+      } catch (err) {
+        if (err !== undefined && axios.isAxiosError(err))
+          this.emailError = (err as AxiosError).response!.data.error;
       }
-      console.log("Email updated to " + this.newEmail);
     },
     async updateUsername() {
-      const res = await axios.post(
-        SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_USERNAME,
-        {
-          token: this.getUser.jwt.token,
-          newUsername: this.newUsername,
-        }
-      );
-      const data = res.data;
-      if (data.error) {
-        this.nameError = data.error;
-        console.log(this.nameError);
-        return;
+      try {
+        await axios.post(
+          SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_USERNAME,
+          {
+            token: this.getUser.jwt.token,
+            newUsername: this.newUsername,
+          }
+        );
+        this.setUsername(this.newUsername);
+        this.newUsername = "";
+        this.usernameError = "";
+      } catch (err) {
+        if (err !== undefined && axios.isAxiosError(err))
+          this.usernameError = (err as AxiosError).response!.data.error;
       }
-      console.log("Username Updated to " + this.newUsername);
     },
     async updatePassword() {
-      const res = await axios.post(
-        SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_PASSWORD,
-        {
-          token: this.getUser.jwt.token,
-          newName: this.newPassword,
-          currentPassword: this.currentPassword,
-        }
-      );
-      const data = res.data;
-      if (data.error) {
-        this.nameError = data.error;
-        console.log(this.nameError);
+      if (this.newPassword !== this.confirmNewPassword) {
+        this.passwordError =
+          "Passwords do not match, please double check and try again.";
         return;
       }
-      console.log("Password Updated to " + this.newPassword);
+      try {
+        await axios.post(
+          SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.UPDATE_PASSWORD,
+          {
+            token: this.getUser.jwt.token,
+            newName: this.newPassword,
+            currentPassword: this.currentPassword,
+          }
+        );
+        this.newPassword = "";
+        this.confirmNewPassword = "";
+        this.currentPassword = "";
+        this.passwordError = "";
+      } catch (err) {
+        if (err !== undefined && axios.isAxiosError(err))
+          this.passwordError = (err as AxiosError).response!.data.error;
+      }
     },
     async deleteAccount() {
-      this.openDeleteAccount = false;
-      console.log("Account has been deleted");
+      await axios.post(SETTINGS_ROUTES.BASE + SETTINGS_ROUTES.DELETE, {
+        token: this.getUser.jwt.token,
+      });
+      this.logoutUser();
+      this.$router.push("/login");
     },
   },
   computed: {

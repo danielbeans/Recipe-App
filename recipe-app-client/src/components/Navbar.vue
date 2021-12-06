@@ -73,6 +73,7 @@
 import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { IUser } from "../interfaces/user.interface";
+import VueRouter from "vue-router";
 
 interface IVListItem {
   name: string;

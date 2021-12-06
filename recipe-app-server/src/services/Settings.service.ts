@@ -28,7 +28,9 @@ export const SettingsService = {
       userToUpdate.save();
       return true;
     }
-    throw new Error("Invalid current password.");
+    throw new Error(
+      "The current password entered is not valid, please try again."
+    );
   },
   async updateName({
     user_id,
@@ -52,6 +54,13 @@ export const SettingsService = {
     user_id: JwtPayload["user_id"];
     newUsername: string;
   }) {
+    const userWithUsernameExists = await UserModel.findOne({
+      username: newUsername,
+    });
+    if (userWithUsernameExists)
+      throw new Error(
+        "User with username already exists, please choose a different username"
+      );
     const userToUpdate = await UserModel.findById(user_id);
     if (userToUpdate) {
       userToUpdate.username = newUsername;
@@ -67,6 +76,13 @@ export const SettingsService = {
     user_id: JwtPayload["user_id"];
     newEmail: string;
   }) {
+    const userWithEmailExists = await UserModel.findOne({
+      email: newEmail,
+    });
+    if (userWithEmailExists)
+      throw new Error(
+        "User with email already exists, please choose a different username"
+      );
     const userToUpdate = await UserModel.findById(user_id);
     if (userToUpdate) {
       userToUpdate.email = newEmail;

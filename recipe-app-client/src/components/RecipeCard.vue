@@ -34,7 +34,9 @@
     </v-card-text>
     <v-divider class="mx-3"></v-divider>
     <v-card-actions>
-      <v-btn color="primary lighten-2" text> Cook now </v-btn>
+      <v-btn color="primary lighten-2" @click="goToRecipe" text
+        >Cook now
+      </v-btn>
       <v-spacer />
       <v-btn class="mr-2" icon light @click="favorite"
         ><v-icon>{{
@@ -61,6 +63,9 @@ export default Vue.extend({
   methods: {
     favorite(): void {
       this.$emit("favorite", this.id);
+    },
+    goToRecipe() {
+      this.$emit("goToRecipe", this.id);
     },
   },
   computed: {

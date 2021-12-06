@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
+import Recipe from "../views/Recipe.vue";
 import store from "../store/index";
 import Recipes from "../views/Recipes.vue";
 import Pantry from "../views/Pantry.vue";
@@ -38,6 +39,15 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: "/recipe/:id",
+    name: "Recipe",
+    component: Recipe,
+    meta: {
+      requiresAuth: true,
+    },
+    props: (route) => ({ ...route.params }),
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login,
@@ -59,6 +69,9 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  },
 });
 
 router.beforeEach(async (to, from, next) => {

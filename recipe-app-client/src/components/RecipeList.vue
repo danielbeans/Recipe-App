@@ -47,6 +47,7 @@
         :health_labels="recipe.healthLabels"
         :favorited="recipe.favorited"
         @favorite="favoriteRecipe"
+        @goToRecipe="goToRecipe"
       />
       <RecipeCard
         class="mx-10"
@@ -172,6 +173,20 @@ export default Vue.extend({
       const recipeToFavorite = curPage.recipes[indexOfRecipe];
       recipeToFavorite.favorited = !recipeToFavorite.favorited;
       await this._favoriteRecipe(curPage.recipes[indexOfRecipe]);
+    },
+    goToRecipe(id: string) {
+      const formattedId: string = new URL(id).hash.substring(1);
+      const curPage: IRecipePage = this.pages[this.currentPageIndex];
+      const indexOfRecipe: number = curPage.recipes.findIndex(
+        (recipe) => recipe.uri === id
+      );
+      const recipe: IRecipe = curPage.recipes[indexOfRecipe];
+      this.$router.push({
+        path: `/recipe/${formattedId}`,
+        query: {
+          recipe,
+        },
+      });
     },
     updateFavorites() {
       const curPage = this.pages[this.currentPageIndex];

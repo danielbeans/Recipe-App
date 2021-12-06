@@ -3,6 +3,9 @@ import { GetterTree, MutationTree, ActionTree } from "vuex";
 
 enum MutationTypes {
   SET_USER = "SET_USER",
+  SET_USERNAME = "SET_USERNAME",
+  SET_EMAIL = "SET_EMAIL",
+  SET_NAME = "SET_NAME",
   LOGOUT_USER = "LOGOUT_USER",
   SET_MODAL_DISPLAY = "SET_MODAL_DISPLAY",
 }
@@ -15,6 +18,15 @@ const mutations = <MutationTree<AuthState>>{
   [MutationTypes.SET_USER](state: AuthState, user: IUser) {
     state.user = user;
   },
+  [MutationTypes.SET_USERNAME](state: AuthState, username: string) {
+    state.user.username = username;
+  },
+  [MutationTypes.SET_EMAIL](state: AuthState, email: string) {
+    state.user.email = email;
+  },
+  [MutationTypes.SET_NAME](state: AuthState, name: string) {
+    state.user.name = name;
+  },
   [MutationTypes.LOGOUT_USER](state: AuthState) {
     state.user = null;
   },
@@ -26,6 +38,16 @@ const mutations = <MutationTree<AuthState>>{
 const actions = <ActionTree<AuthState, any>>{
   setUser(context, user: IUser) {
     context.commit(MutationTypes.SET_USER, user);
+  },
+  setUsername(context, username: string) {
+    console.log(username);
+    context.commit(MutationTypes.SET_USERNAME, username);
+  },
+  setEmail(context, email: string) {
+    context.commit(MutationTypes.SET_EMAIL, email);
+  },
+  setName(context, name: string) {
+    context.commit(MutationTypes.SET_NAME, name);
   },
   logoutUser(context) {
     localStorage.clear();

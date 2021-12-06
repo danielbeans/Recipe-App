@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "/src",
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -23,7 +22,7 @@
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "files": ["this-needs-to-be-here-because-if-not-it-won't-compile-idk-why"],
+  // "files": ["this-needs-to-be-here-because-if-not-it-won't-compile-idk-why"],
   "include": [
     "../shared//*.ts",
     "src//.ts",
