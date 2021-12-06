@@ -11,7 +11,6 @@ export const PantryController = {
       );
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({ error: (err as Error).message });
     }
   },
@@ -25,7 +24,6 @@ export const PantryController = {
         throw new Error(data.message);
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({ error: (err as Error).message });
     }
   },
@@ -39,7 +37,6 @@ export const PantryController = {
         throw new Error(data.message); // TODO make utility functions for error checking
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({
         error: (err as Error).message,
       });
@@ -50,7 +47,6 @@ export const PantryController = {
       const data = await PantryService.getPantry(req.body.token);
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({ error: (err as Error).message });
     }
   },
@@ -59,7 +55,6 @@ export const PantryController = {
       const data = await PantryService.clearPantry(req.body.token);
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({ error: (err as Error).message });
     }
   },

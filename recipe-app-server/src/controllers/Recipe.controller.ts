@@ -9,7 +9,6 @@ export const RecipeController = {
       const data = await RecipeService.getRecipes(req as IRecipeRequest); // gets recipes based on search query
       return res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       res.status(400).send({ error: (err as Error).message });
     }
   },
