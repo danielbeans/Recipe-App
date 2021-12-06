@@ -7,7 +7,7 @@
         indeterminate
       ></v-progress-linear>
     </template>
-    <v-img height="250" :src="image"></v-img>
+    <img class="mx-auto object-contain w-full" :src="image" />
     <v-card-title
       ><span class="text-truncate w-4/5 whitespace-nowrap text-left">{{
         name

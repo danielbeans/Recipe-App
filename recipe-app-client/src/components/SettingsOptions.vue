@@ -1,54 +1,68 @@
 <template>
   <v-container class="pa-6 ml-0 mt-20">
     <div class="rightbox">
-      <div class="profile settings">
+      <div class="profile px-8 settings">
         <h1 class="text-h3 font-weight-bold">Profile Settings</h1>
+<<<<<<< Updated upstream
 
         <h2 class="text-h6 mt-5 font-weight-bold">Name</h2>
         <v-text-field v-model="newName" :placeholder="getName()" class="w-1/4">
+=======
+        <h2 class="text-h6 mt-5 font-weight-bold">Change Name</h2>
+        <v-text-field v-model="newName" placeholder="New Name" class="w-1/4">
+>>>>>>> Stashed changes
         </v-text-field>
         <v-btn
           @click="updateName"
           depressed
-          class="block mb-5"
-          color="secondary"
-          >Update</v-btn
+          class="block mb-5 text-white"
+          color="red"
+          >Update Name</v-btn
         >
         <v-divider></v-divider>
 
-        <h2 class="text-h6 mt-5 font-weight-bold">Username</h2>
+        <h2 class="text-h6 mt-5 font-weight-bold">Change Username</h2>
         <v-text-field
           v-model="newUsername"
+<<<<<<< Updated upstream
           :placeholder="getUsername()"
+=======
+          placeholder="New Username text-white"
+>>>>>>> Stashed changes
           class="w-1/4"
         >
         </v-text-field>
         <v-btn
           @click="updateUsername"
           depressed
-          class="block mb-5"
-          color="secondary"
-          >Update</v-btn
+          class="block mb-5 text-white"
+          color="red"
+          >Update Username</v-btn
         >
         <v-divider></v-divider>
 
+<<<<<<< Updated upstream
         <h2 class="text-h6 mt-5 font-weight-bold">Email</h2>
         <v-text-field
           v-model="newEmail"
           :placeholder="getEmail()"
           class="w-1/3"
         >
+=======
+        <h2 class="text-h6 mt-5 font-weight-bold">Change Email</h2>
+        <v-text-field v-model="newEmail" placeholder="New Email" class="w-1/4">
+>>>>>>> Stashed changes
         </v-text-field>
         <v-btn
           @click="updateEmail"
           depressed
-          class="block mb-5"
-          color="secondary"
-          >Update</v-btn
+          class="block mb-5 text-white"
+          color="red"
+          >Update Email</v-btn
         >
         <v-divider></v-divider>
 
-        <h2 class="text-h6 mt-5 font-weight-bold">Password</h2>
+        <h2 class="text-h6 mt-5 font-weight-bold">Change Password</h2>
         <v-text-field
           v-model="newPassword"
           placeholder="New Password"
@@ -64,9 +78,9 @@
         <v-btn
           @click="updatePassword"
           depressed
-          class="block mb-5"
-          color="secondary"
-          >Update</v-btn
+          color="red"
+          class="block mb-5 text-white"
+          >Update Password</v-btn
         >
 
         <v-divider class="block mb-5"></v-divider>
@@ -84,16 +98,19 @@
         <div>
           <v-dialog v-model="openDeleteAccount" width="500">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="red" dark v-bind="attrs" v-on="on">
+              <h2 class="text-h6 mt-5 font-weight-bold">Delete Account</h2>
+              <v-btn class="mt-5" color="red" dark v-bind="attrs" v-on="on">
                 Delete Account
               </v-btn>
             </template>
-
             <v-card>
               <v-card-title class="text-h5"> Delete Account? </v-card-title>
-
               <v-divider></v-divider>
-
+              <v-card-text class="mt-5">
+                Deleting your account will delete all data associated with it.
+                This action is irreversibile. Are you sure you would like to do
+                so?</v-card-text
+              >
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" text @click="deleteAccount">

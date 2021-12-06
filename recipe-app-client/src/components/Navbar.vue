@@ -92,7 +92,6 @@ export default Vue.extend({
       navItems: [
         { name: "Recipes", icon: "mdi-book", route: "/recipes" },
         { name: "Pantry", icon: "mdi-fridge", route: "/pantry" },
-        { name: "Order", icon: "mdi-cart", route: "/order" },
         { name: "Settings", icon: "mdi-cog", route: "/settings" },
       ] as IVListItem[],
     };
