@@ -50,8 +50,5 @@ export default Vue.extend({
       return this.getPantryItemNames.includes(ingredient.toLowerCase());
     },
   },
-  mounted() {
-    console.log(this.ingredients);
-  },
 });
 </script>

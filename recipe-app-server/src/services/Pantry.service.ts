@@ -7,21 +7,19 @@ export const PantryService = {
     try {
       const { user_id } = decodeJWT(token);
       const user = await UserModel.findById(user_id);
-      user.pantry.push(newItem);
+      user.pantry.push({ name: newItem.name });
       await user.save();
       return user.pantry;
     } catch {
       throw new Error("Could not add to Pantry.");
     }
   },
-  async editPantry(itemToEdit: IPantryItem, token: string) {
+  async editPantry({ name, id }: IPantryItem, token: string) {
     try {
       const { user_id } = decodeJWT(token);
       const user = await UserModel.findById(user_id);
-      const foundIndex = user.pantry.findIndex(
-        (item) => item.id === itemToEdit.id
-      );
-      user.pantry[foundIndex] = itemToEdit;
+      const foundIndex = user.pantry.findIndex((item) => item.id === id);
+      user.pantry[foundIndex].name = name;
       if (foundIndex === -1) return new Error("Could not find item in Pantry");
       await user.save();
       return user.pantry;

@@ -1,5 +1,5 @@
 export interface IPantryItem {
-  readonly id: string;
+  readonly id?: string;
   name: string;
   quantity?: number;
   measure?: string;

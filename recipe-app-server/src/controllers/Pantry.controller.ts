@@ -9,7 +9,7 @@ export const PantryController = {
         req.body.pantryItem as IPantryItem,
         req.body.token
       );
-      return res.status(200).json(data);
+      return res.status(200).json(data[data.length - 1]);
     } catch (err) {
       res.status(400).send({ error: (err as Error).message });
     }
@@ -35,6 +35,7 @@ export const PantryController = {
       );
       if (data instanceof Error && data.stack && data.message)
         throw new Error(data.message); // TODO make utility functions for error checking
+
       return res.status(200).json(data);
     } catch (err) {
       res.status(400).send({

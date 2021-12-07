@@ -10,12 +10,10 @@
         <div v-if="pantry.length">
           <PantryListItem
             v-for="item in pantry"
-            @setSelected="setSelected"
-            @setItem="setItem"
+            :setSelectedParent="setSelected"
             :selected="selected"
             :key="item.id"
-            :id="item.id"
-            :name="item.name"
+            :item="item"
             :editParent="edit"
             :removeParent="remove"
           />
@@ -30,7 +28,7 @@
             <v-icon>mdi-check</v-icon>
           </v-btn>
           <v-text-field
-            v-model="itemToAdd"
+            v-model="itemToAdd.name"
             class="mx-3"
             label="Item"
             @keydown.enter="add"
@@ -83,8 +81,14 @@ export default Vue.extend({
     return {
       AlertType,
       startAdding: false,
-      selected: "",
-      itemToAdd: "",
+      selected: {
+        id: "",
+        name: "",
+      },
+      itemToAdd: {
+        id: "",
+        name: "",
+      } as IPantryItem,
       modalState: {
         type: AlertType.SUCCESS,
         text: "",
@@ -95,11 +99,8 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       getUser: "AuthModule/getUser",
-      getPantry: "PantryModule/getPantry",
+      pantry: "PantryModule/getPantry",
     }),
-    pantry(): IPantryItem[] {
-      return this.getPantry;
-    },
   },
   methods: {
     ...mapActions({
@@ -107,20 +108,24 @@ export default Vue.extend({
       removePantryItem: "PantryModule/removePantryItem",
       editPantryItem: "PantryModule/editPantryItem",
     }),
-    remove(id: string): void {
-      const itemName = this.getPantry.find((item) => item.id === id).name;
-      this.removePantryItem(id);
+    remove(item: IPantryItem): void {
+      const itemToRemove = this.pantry.find((i) => i._id === item._id);
+      this.removePantryItem(itemToRemove);
       this.setModalState(
         AlertType.SUCCESS,
-        `You have successfully removed ${itemName} from your pantry`,
+        `You have successfully removed ${item.name} from your pantry`,
         true
       );
     },
-    edit(): void {
-      this.selected = "";
+    edit(newItem: IPantryItem): void {
+      this.editPantryItem(newItem);
+      this.selected = {
+        id: "",
+        name: "",
+      };
     },
     add(): void {
-      if (this.itemToAdd.length > 0) {
+      if (this.itemToAdd.name.length > 0) {
         this.addPantryItem(this.itemToAdd);
         this.setModalState(
           AlertType.SUCCESS,
@@ -129,13 +134,10 @@ export default Vue.extend({
         );
       }
       this.startAdding = false;
-      this.itemToAdd = "";
+      this.itemToAdd.name = "";
     },
-    setItem(newItem: IPantryItem): void {
-      this.editPantryItem(newItem);
-    },
-    setSelected(id: string): void {
-      this.selected = id;
+    setSelected(item: IPantryItem): void {
+      this.selected.id = item.id;
     },
     setModalState(type: AlertType, text: string, display: boolean) {
       this.modalState = { type, text, display };

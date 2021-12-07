@@ -7,4 +7,8 @@ export const PantryItemSchema = new Schema<IPantryItem>({
   name: { type: String, required: true },
 });
 
+PantryItemSchema.set("toJSON", {
+  virtuals: true,
+});
+
 export const PantryItemModel = mongoose.model("PantryItem", PantryItemSchema);

@@ -36,8 +36,9 @@ const mutations = <MutationTree<AuthState>>{
 };
 
 const actions = <ActionTree<AuthState, any>>{
-  setUser(context, user: IUser) {
+  async setUser(context, user: IUser) {
     context.commit(MutationTypes.SET_USER, user);
+    await this.dispatch("PantryModule/getPantry", context, { root: true });
   },
   setUsername(context, username: string) {
     console.log(username);

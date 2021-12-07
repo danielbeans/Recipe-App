@@ -9,25 +9,25 @@ enum MutationTypes {
   REMOVE_PANTRY_ITEM = "REMOVE_PANTRY_ITEM",
   EDIT_PANTRY_ITEM = "EDIT_PANTRY_ITEM ",
   UPDATE_PANTRY_ITEM = "UPDATE_PANTRY_ITEM",
-  GET_PANTRY_ITEM = "GET_PANTRY_ITEM",
+  SET_PANTRY = "SET_PANTRY",
 }
 class PantryState {
   pantry: IPantryItem[] = [];
 }
 
 const mutations = <MutationTree<PantryState>>{
-  [MutationTypes.ADD_PANTRY_ITEM](state: PantryState, newItemName: string) {
-    state.pantry.push({ name: newItemName, id: uuidv4() });
+  [MutationTypes.ADD_PANTRY_ITEM](state: PantryState, newItem: IPantryItem) {
+    state.pantry = [...state.pantry, newItem];
   },
   [MutationTypes.REMOVE_PANTRY_ITEM](state: PantryState, id: string) {
-    const indexToRemove = state.pantry.findIndex((item) => item.id === id);
-    state.pantry.splice(indexToRemove, 1);
+    const pantry = state.pantry.filter((item) => item.id !== id);
+    state.pantry = pantry;
   },
-  [MutationTypes.EDIT_PANTRY_ITEM](state: PantryState, newItem: IPantryItem) {
-    const indexToEdit = state.pantry.findIndex(
-      (item) => item.id === newItem.id
-    );
-    state.pantry[indexToEdit] = newItem;
+  [MutationTypes.EDIT_PANTRY_ITEM](
+    state: PantryState,
+    newPantry: IPantryItem[]
+  ) {
+    state.pantry = newPantry;
   },
   [MutationTypes.UPDATE_PANTRY_ITEM](
     state: PantryState,
@@ -35,22 +35,45 @@ const mutations = <MutationTree<PantryState>>{
   ) {
     state.pantry = pantry;
   },
-  [MutationTypes.GET_PANTRY_ITEM](state: PantryState, pantry: IPantryItem[]) {
+  [MutationTypes.SET_PANTRY](state: PantryState, pantry: IPantryItem[]) {
     state.pantry = pantry;
   },
 };
 
 const actions = <ActionTree<PantryState, any>>{
-  addPantryItem(context, newItem: IPantryItem) {
-    context.commit(MutationTypes.ADD_PANTRY_ITEM, newItem);
+  async addPantryItem({ commit, rootState }, pantryItem: IPantryItem) {
+    try {
+      const res = await axios.post(PANTRY_ROUTES.BASE + PANTRY_ROUTES.ADD, {
+        pantryItem,
+        token: rootState.AuthModule.user.jwt.token,
+      });
+      commit(MutationTypes.ADD_PANTRY_ITEM, res.data);
+    } catch (err) {
+      console.log(err);
+    }
   },
-  removePantryItem(context, item: IPantryItem) {
-    localStorage.removeItem("user");
-    context.commit(MutationTypes.REMOVE_PANTRY_ITEM, item);
+  async removePantryItem({ commit, rootState }, pantryItem: IPantryItem) {
+    try {
+      const res = await axios.post(PANTRY_ROUTES.BASE + PANTRY_ROUTES.REMOVE, {
+        pantryItem,
+        token: rootState.AuthModule.user.jwt.token,
+      });
+      commit(MutationTypes.REMOVE_PANTRY_ITEM, pantryItem.id);
+    } catch (err) {
+      console.log(err);
+    }
   },
-  editPantryItem(context, newItem: IPantryItem) {
+  async editPantryItem({ commit, rootState }, pantryItem: IPantryItem) {
     localStorage.removeItem("modalDisplayed");
-    context.commit(MutationTypes.EDIT_PANTRY_ITEM, newItem);
+    try {
+      const res = await axios.post(PANTRY_ROUTES.BASE + PANTRY_ROUTES.EDIT, {
+        pantryItem,
+        token: rootState.AuthModule.user.jwt.token,
+      });
+      commit(MutationTypes.EDIT_PANTRY_ITEM, res.data);
+    } catch (err) {
+      console.log(err);
+    }
   },
   // Updates Pantry and then sets state Pantry from the updated Pantry in the response
   async updatePantry({ commit, rootState }, pantry: IPantryItem[]) {
@@ -70,7 +93,7 @@ const actions = <ActionTree<PantryState, any>>{
       const res = await axios.post(PANTRY_ROUTES.BASE + PANTRY_ROUTES.GET, {
         token: rootState.AuthModule.user.jwt.token,
       });
-      commit(MutationTypes.GET_PANTRY_ITEM, res.data);
+      commit(MutationTypes.SET_PANTRY, res.data);
     } catch (err) {
       console.error(err);
     }
