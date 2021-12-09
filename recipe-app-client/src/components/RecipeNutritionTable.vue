@@ -14,6 +14,7 @@ import IRecipe from "@shared/interfaces/recipe.interface";
 import RecipeIngredientList from "../components/RecipeIngredientList.vue";
 export default Vue.extend({
   props: {
+    calories: Number,
     weight: Number,
     serves: Number,
     label: String,
@@ -29,6 +30,7 @@ export default Vue.extend({
           value: "name",
           width: `300px`,
         },
+        { text: `Calories (kcal)`, value: `calories`, width: `150px` },
         ...this.totalNutrients.map((item: any) => {
           const name: string = item.label.split(",")[0];
           return {
@@ -60,7 +62,10 @@ export default Vue.extend({
         nutrient.label.toLowerCase(),
         `${(nutrient.total / this.serves).toFixed(2)}`,
       ]);
-      return Object.fromEntries(nutrientMap);
+      return Object.fromEntries([
+        ["calories", `${(this.calories / this.serves).toFixed(2)}`],
+        ...nutrientMap,
+      ]);
     },
   },
 });

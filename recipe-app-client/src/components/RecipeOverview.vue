@@ -23,6 +23,7 @@
       <h3 class="mb-5 text-gray-500">Nutrition:</h3>
       <v-divider class="w-full lg:w-1/2 mx-auto" />
       <RecipeNutritionTable
+        :calories="recipe.calories"
         :label="recipe.label"
         :serves="recipe.yield"
         :weight="recipe.totalWeight"

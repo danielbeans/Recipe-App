@@ -20,7 +20,10 @@
               ></v-simple-checkbox>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title v-text="ingredient.text"></v-list-item-title>
+              <v-list-item-title
+                class="text-wrap"
+                v-text="ingredient.text"
+              ></v-list-item-title>
             </v-list-item-content>
           </template>
         </v-list-item>
