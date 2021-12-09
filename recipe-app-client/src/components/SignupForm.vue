@@ -22,7 +22,9 @@
       <h3 class="text-xl mb-4 text-gray-600 text-center">Sign up</h3>
       <div class="mb-4 flex flex-wrap md:flex-nowrap">
         <div class="w-full md:mr-5 mb-2">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+          <label class="block text-gray-700 text-sm font-bold mb-2"
+            >Full Name</label
+          >
           <input
             v-model="signupForm.name"
             required

@@ -9,6 +9,9 @@
       label="Add ingredients for search"
       small-chips
     ></v-combobox>
+    <v-alert type="error" v-if="ingredients.length <= 0"
+      >Your ingredients list search is empty</v-alert
+    >
     <v-btn color="primary" depressed class="flex" @click="getRecipes"
       >Search</v-btn
     >
